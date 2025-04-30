@@ -1,0 +1,23 @@
+BUGGZ!!!
+1- some text appears grey or muted on mobile 
+2- mobile sizes need re-adjustment
+3- crew cards need a set number of available lines for each segment of the text section
+4- articles the index text sometimes pops out its section
+
+
+24/april/2025
+1- fix the minimize button in the services modal (done)
+2- fill in content 
+3- figure out how to re-claim FB page
+4- legal pages
+5- also contact us bubble with n8n
+6- fix mobile dimensions (whichmeans collapsing the index area)
+7- fix list-disc to respond to rtl ltr toggle
+8- statistics section breaks on mobile (done)
+
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/chapo7777/CIM-v30.git
+git push -u origin main
