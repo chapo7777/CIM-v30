@@ -21,3 +21,11 @@ git commit -m "Initial commit"
 git branch -M main
 git remote add origin https://github.com/chapo7777/CIM-v30.git
 git push -u origin main
+
+
+git config --global user.name "chapo7777"
+git config --global user.email "chpcim0@gmail.com"
+
+
+git remote remove origin
+git remote add origin https://github.com/chapo7777/CIM-v30.git
