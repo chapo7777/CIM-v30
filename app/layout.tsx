@@ -18,6 +18,14 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head />
       <body style={{ fontFamily: "Cairo, sans-serif" }}>
+{/* //BackGround */}
+  <div className="fixed inset-0 z-0">
+    <img
+      src="/assets/topography_heartbeat_fixed.svg"
+      alt=""
+      className="w-full h-full object-cover opacity-5 mix-blend-soft-light pointer-events-none"
+    />
+   </div>
 
       <div >
 
