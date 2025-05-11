@@ -93,8 +93,8 @@ export const Navbar = () => {
         {/* Logo and Title */}
         <div className="flex items-center p-3">
           <img src="/logo.png" alt="CIM" className="w-10 h-10 rounded-full" />
-          <span className="p-2 font-bold text-sm md:text-base lg:text-lg truncate max-w-[175px] md:max-w-[200px] lg:max-w-none">
-            {isArabic ? "الهيئة العامة للإتصالات والمعلوماتية" : "General Authority of Communications and IT"}
+          <span className="p-2 font-bold text-sl md:text-base lg:text-lg truncate max-w-[175px] md:max-w-[200px] lg:max-w-none">
+             G A C I
           </span>
         </div>
 
