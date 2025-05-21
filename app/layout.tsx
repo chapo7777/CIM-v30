@@ -27,7 +27,7 @@ export default function RootLayout({
     />
    </div>
 
-      <div >
+      <div className="bg-gray-50" >
 
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <LanguageProvider>
