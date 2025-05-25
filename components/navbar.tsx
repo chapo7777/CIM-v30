@@ -106,7 +106,7 @@ export const Navbar = () => {
       >
         {/* Logo and Title */}
         <div className="flex items-center p-3 border border-gray-300 rounded-lg shadow-sm bg-white">
-          <img src="/logo.png" alt="CIM" className="w-10 h-10 rounded-full" />
+          <img src="/logo.png" alt="GACI" className="w-10 h-10 rounded-full" />
           <span className="p-2 font-extrabold text-base md:text-lg lg:text-xl truncate max-w-[175px] md:max-w-[200px] lg:max-w-none text-gray-800">
             G A C I
           </span>
@@ -258,7 +258,9 @@ export const Navbar = () => {
               <DropdownMenuContent>
                 <DropdownMenuLabel>Our Services</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <Link href="/Services">
                 <DropdownMenuItem>E-Government</DropdownMenuItem>
+                </Link>
                 <Link href="/Services">
                   <DropdownMenuItem>
                     Communications and Information Technology Regulation

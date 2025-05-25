@@ -22,30 +22,26 @@ interface LanguageProviderProps {
   children: ReactNode
 }
 
-export const LanguageProvider = ({ children }: { children: ReactNode }) => {
+export const LanguageProvider = ({ children }: LanguageProviderProps) => {
   const [isArabic, setIsArabic] = useState(false)
-  const [isClient, setIsClient] = useState(false)
 
-  // Handle hydration mismatch by only running effect on client
   useEffect(() => {
-    setIsClient(true)
-    const storedLanguage = localStorage.getItem("language")
-    if (storedLanguage === "arabic") {
-      setIsArabic(true)
-    }
+    const storedLang = localStorage.getItem("language")
+    setIsArabic(storedLang === "ar")
+
+    // Apply direction to the document
+    document.documentElement.dir = storedLang === "ar" ? "rtl" : "ltr"
   }, [])
 
   const toggleLanguage = () => {
     setIsArabic((prev) => {
-      const newLanguage = !prev
-      if (typeof window !== "undefined") {
-        localStorage.setItem("language", newLanguage ? "arabic" : "english")
-      }
-      return newLanguage
+      const newLang = !prev ? "ar" : "en"
+      localStorage.setItem("language", newLang)
+      document.documentElement.dir = newLang === "ar" ? "rtl" : "ltr"
+      return !prev
     })
   }
 
-  // Derive additional properties
   const language = isArabic ? "ar" : "en"
   const direction = isArabic ? "rtl" : "ltr"
 
