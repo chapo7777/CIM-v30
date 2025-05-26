@@ -50,7 +50,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-semibold">Home</span>
-                  <span className="text-xs text-muted-foreground">Landing Page</span>
+                  <span className="text-xs text-muted-foreground">Go to Landing Page</span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -63,28 +63,29 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <div className="overflow-hidden rounded-lg border">
             <img
               src="/sv1-img.png"
-              alt="Sidebar image"
+              alt="SV1"
               className="w-full h-auto object-cover"
             />
           </div>
         </div>
         <SidebarGroup>
-          <SidebarMenu>
+          <SidebarMenu className="space-y-5">
             {data.navMain.map((item, index) => (
               <Collapsible key={item.title} defaultOpen={index === 1} className="group/collapsible">
-                <SidebarMenuItem>
+                <SidebarMenuItem className="space-y-4">
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton>
-                      {item.title} <Plus className="ml-auto group-data-[state=open]/collapsible:hidden" />
-                      <Minus className="ml-auto group-data-[state=closed]/collapsible:hidden" />
+                    <SidebarMenuButton className="px-4 py-3  whitespace-normal break-words">
+                      {item.title} <Plus className="ml-auto   group-data-[state=open]/collapsible:hidden" />
+                      <Minus className="ml-auto  group-data-[state=closed]/collapsible:hidden" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
                   {item.items?.length ? (
                     <CollapsibleContent>
-                      <SidebarMenuSub>
+                      <SidebarMenuSubButton className="flex items-start w-full">
                         {item.items.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton asChild isActive={item.isActive}>
+                          <SidebarMenuSubItem className="py-2  whitespace-normal break-words" key={item.title}>
+                            <SidebarMenuSubButton asChild isActive={item.isActive}
+                            className="whitespace-normal break-words leading-snug">
                               <a href={item.url}>{item.title}</a>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
