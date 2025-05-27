@@ -1,108 +1,63 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
-import { Search } from "lucide-react"
+import { Search, X } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
-import { Label } from "@/components/ui/label"
-import { SidebarGroup, SidebarGroupContent, SidebarInput } from "@/components/ui/sidebar"
-
-// Define the data structure for search results
-type SearchResult = {
-  title: string
-  url: string
-  category: string
+interface SearchFormProps {
+  className?: string
+  placeholder?: string
+  onSearch?: (query: string) => void
 }
 
-export function SearchForm({ ...props }: React.ComponentProps<"form">) {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([])
-  const [isSearching, setIsSearching] = useState(false)
+export function SearchForm({ className = "", placeholder = "Search...", onSearch }: SearchFormProps) {
+  const [query, setQuery] = useState("")
+  const [isFocused, setIsFocused] = useState(false)
 
-  // Mock data for search results - in a real app, this would come from your data source
-  const allItems: SearchResult[] = [
-    { title: "Installation", url: "#", category: "Getting Started" },
-    { title: "Project Structure", url: "#", category: "Getting Started" },
-    { title: "Routing", url: "#", category: "Building Your Application" },
-    { title: "Data Fetching", url: "#", category: "Building Your Application" },
-    { title: "Rendering", url: "#", category: "Building Your Application" },
-    { title: "Caching", url: "#", category: "Building Your Application" },
-    { title: "Components", url: "#", category: "API Reference" },
-    { title: "Functions", url: "#", category: "API Reference" },
-    { title: "Accessibility", url: "#", category: "Architecture" },
-  ]
-
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-
-    if (!searchQuery.trim()) {
-      setSearchResults([])
-      return
+    if (query.trim()) {
+      onSearch?.(query.trim())
+      console.log("Searching for:", query.trim())
     }
+  }
 
-    setIsSearching(true)
-
-    // Simulate a search delay
-    setTimeout(() => {
-      const results = allItems.filter(
-        (item) =>
-          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          item.category.toLowerCase().includes(searchQuery.toLowerCase()),
-      )
-      setSearchResults(results)
-      setIsSearching(false)
-    }, 300)
+  const handleClear = () => {
+    setQuery("")
+    setIsFocused(false)
   }
 
   return (
-    <div className="relative">
-      <form {...props} onSubmit={handleSearch}>
-        <SidebarGroup className="py-0">
-          <SidebarGroupContent className="relative">
-            <Label htmlFor="search" className="sr-only">
-              Search
-            </Label>
-            <SidebarInput
-              id="search"
-              placeholder="Search the docs..."
-              className="pl-8"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <Search className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 select-none opacity-50" />
-          </SidebarGroupContent>
-        </SidebarGroup>
+    <div className={className}>
+      <form onSubmit={handleSubmit} className="relative">
+        <div className={`relative transition-all duration-300 ${isFocused ? "scale-105" : ""}`}>
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <Input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            placeholder={placeholder}
+            className={`pl-10 pr-10 bg-white/60 backdrop-blur-sm border-slate-200/60 rounded-xl transition-all duration-300 focus:bg-white/80 focus:border-blue-300 focus:ring-2 focus:ring-blue-100 ${
+              isFocused ? "shadow-lg shadow-blue-500/10" : "shadow-sm"
+            }`}
+          />
+          {query && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={handleClear}
+              className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-slate-100/80 rounded-lg"
+            >
+              <X className="h-3 w-3 text-slate-400" />
+            </Button>
+          )}
+        </div>
       </form>
-
-      {/* Search results dropdown */}
-      {searchResults.length > 0 && (
-        <div className="absolute z-10 mt-1 w-full rounded-md border bg-white shadow-lg">
-          <ul className="max-h-60 overflow-auto py-1 text-sm">
-            {searchResults.map((result, index) => (
-              <li key={index}>
-                <a href={result.url} className="block px-4 py-2 hover:bg-blue-50 text-gray-700">
-                  <div className="font-medium">{result.title}</div>
-                  <div className="text-xs text-gray-500">{result.category}</div>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {/* No results state */}
-      {isSearching && (
-        <div className="absolute z-10 mt-1 w-full rounded-md border bg-white p-2 shadow-lg text-center text-sm text-gray-500">
-          Searching...
-        </div>
-      )}
-
-      {searchQuery && !isSearching && searchResults.length === 0 && (
-        <div className="absolute z-10 mt-1 w-full rounded-md border bg-white p-2 shadow-lg text-center text-sm text-gray-500">
-          No results found
-        </div>
-      )}
     </div>
   )
 }

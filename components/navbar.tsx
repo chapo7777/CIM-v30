@@ -1,10 +1,11 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
-import { useLanguage } from "@/contexts/language-context";
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useState, useEffect, useRef } from "react"
+import { Menu, X, ChevronDown, Globe, Search } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
+import { SearchForm } from "@/components/search-form"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,70 +13,76 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
 
 export const Navbar = () => {
-  const pathname = usePathname();
-  const { isArabic } = useLanguage();
-  const [isOpen, setIsOpen] = useState(false);
-  const [currentHash, setCurrentHash] = useState("");
+  const pathname = usePathname()
+  const [isOpen, setIsOpen] = useState(false)
+  const [currentHash, setCurrentHash] = useState("")
+  const [scrolled, setScrolled] = useState(false)
+  const [showMobileSearch, setShowMobileSearch] = useState(false)
+  const { isArabic, direction, toggleLanguage } = useLanguage()
 
   useEffect(() => {
-    const handleHashChange = () => setCurrentHash(window.location.hash);
-    handleHashChange(); // run once on mount
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
-  }, []);
+    const handleHashChange = () => setCurrentHash(window.location.hash)
+    handleHashChange()
+    window.addEventListener("hashchange", handleHashChange)
+    return () => window.removeEventListener("hashchange", handleHashChange)
+  }, [])
 
-  const [isMobile, setIsMobile] = useState(false);
-  const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const prevIsMobileRef = useRef(isMobile);
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
-  // Handle responsive behavior
+  const [isMobile, setIsMobile] = useState(false)
+  const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+  const prevIsMobileRef = useRef(isMobile)
+
   useEffect(() => {
     const checkScreenSize = () => {
-      const newIsMobile = window.innerWidth < 1024;
-      setIsMobile(newIsMobile);
+      const newIsMobile = window.innerWidth < 1024
+      setIsMobile(newIsMobile)
 
-      // Close hamburger menu when transitioning from mobile to desktop
       if (prevIsMobileRef.current && !newIsMobile) {
-        setIsOpen(false);
+        setIsOpen(false)
+        setShowMobileSearch(false)
       }
-      prevIsMobileRef.current = newIsMobile;
-    };
+      prevIsMobileRef.current = newIsMobile
+    }
 
-    // Initial check
-    checkScreenSize();
+    checkScreenSize()
+    window.addEventListener("resize", checkScreenSize)
+    return () => window.removeEventListener("resize", checkScreenSize)
+  }, [])
 
-    // Add event listener for window resize
-    window.addEventListener("resize", checkScreenSize);
-
-    // Cleanup
-    return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
-
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setAboutDropdownOpen(false);
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setAboutDropdownOpen(false)
       }
-    };
+    }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
 
-  const toggleNavbar = () => setIsOpen(!isOpen);
-  const toggleAboutDropdown = () => setAboutDropdownOpen(!aboutDropdownOpen);
+  const toggleNavbar = () => setIsOpen(!isOpen)
+  const toggleAboutDropdown = () => setAboutDropdownOpen(!aboutDropdownOpen)
+  const toggleMobileSearch = () => setShowMobileSearch(!showMobileSearch)
 
-  // About dropdown items
+  const handleSearch = (query: string) => {
+    // Implement your search logic here
+    console.log("Searching for:", query)
+    // You could navigate to a search results page or filter content
+  }
+
   const aboutDropdownItems = [
     { href: "/About/overview", labelAr: "نبذة عن الهيئة", labelEn: "Overview" },
     { href: "/crew-heirarchy", labelAr: "القيادة", labelEn: "Leadership" },
@@ -83,211 +90,331 @@ export const Navbar = () => {
       href: "/itl-co-op",
       labelAr: "التعاون الدولي",
       labelEn: "International Co-op",
-    }, // ← moved here
-  ];
+    },
+  ]
 
-  // All navigation links in proper order
   const navLinks = [
     { href: "/", labelAr: "الرئيسية", labelEn: "Home" },
-    // About is handled separately but kept in position
     { isAbout: true },
     { href: "/news", labelAr: "المركز الإعلامي", labelEn: "News" },
-  ];
+  ]
 
   return (
-    <div dir={isArabic ? "rtl" : "ltr"} style={{ position: "relative" }}>
+    <div className="relative">
       <nav
-        className="bg-white px-4 py-4 backdrop-blur-md text-black min-h-20 flex items-center justify-between sticky top-0 z-50"
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
+          scrolled
+            ? "bg-white/80 backdrop-blur-xl border-b border-slate-200/50 shadow-lg shadow-slate-900/5"
+            : "bg-white/95 backdrop-blur-md"
+        }`}
         style={{
-          width: "100%",
-          maxWidth: "100%",
-          margin: "0 auto",
+          background: scrolled ? "rgba(255, 255, 255, 0.85)" : "rgba(255, 255, 255, 0.95)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
         }}
       >
-        {/* Logo and Title */}
-        <div className="flex items-center p-3 border border-gray-300 rounded-lg shadow-sm bg-white">
-          <img src="/logo.png" alt="GACI" className="w-10 h-10 rounded-full" />
-          <span className="p-2 font-extrabold text-base md:text-lg lg:text-xl truncate max-w-[175px] md:max-w-[200px] lg:max-w-none text-gray-800">
-            G A C I
-          </span>
-        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            {/* Logo */}
+            <div className="flex items-center group">
+              <div className="relative p-3 bg-gradient-to-br from-slate-50 to-white border border-slate-200/60 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-indigo-50/30 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="w-10 h-10 rounded-xl relative z-10 bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg">
+                  G
+                </div>
+              </div>
+              <div className="ml-4">
+                <span className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent tracking-tight">
+                  G A C I
+                </span>
+              </div>
+            </div>
 
-        {/* Navigation Links Container */}
-        <div className="flex items-center justify-end lg:justify-center lg:flex-1">
-          {/* Navigation Links */}
-          <div
-            className={`${
-              isOpen
-                ? "translate-y-0 opacity-100"
-                : "translate-y-[-10px] opacity-0 pointer-events-none"
-            } lg:translate-y-0 lg:opacity-100 lg:pointer-events-auto transition-all duration-200 ease-in-out 
-            absolute lg:relative top-20 lg:top-0 left-0 lg:left-auto right-0 lg:right-auto 
-            bg-white lg:bg-transparent p-5 lg:p-0 shadow-lg lg:shadow-none rounded-xl lg:rounded-none 
-            flex flex-col lg:flex-row items-center justify-evenly gap-1 lg:gap-3 w-full z-40 ${
-              isOpen ? "border-blue-500 border-l border-r border-b" : ""
-            }`}
-            style={{
-              boxShadow: isOpen
-                ? "0 10px 15px rgba(59, 130, 246, 0.2)"
-                : "none",
-            }}
-          >
-            {/* Render all nav links in order, with special handling for About */}
-            {navLinks.map((link, index) => {
-              // Special handling for the About dropdown
-              if ("isAbout" in link) {
-                return (
-                  <div
-                    key="about"
-                    className={isMobile ? "w-full" : "relative"}
-                    ref={dropdownRef}
-                  >
-                    {/* About Button - Desktop & Mobile */}
-                    <button
-                      onClick={toggleAboutDropdown}
-                      className={`py-2 px-4 rounded-lg transition-all duration-200 font-medium whitespace-nowrap
-                        ${isArabic ? "text-right" : "text-left"}
-                        ${isMobile ? "w-full" : ""}
-                        flex items-center ${
-                          isMobile ? "justify-between" : "gap-1"
-                        }
-                        bg-gray-50 text-gray-800 hover:bg-blue-100 hover:text-blue-600
-                      `}
-                      style={{
-                        minWidth: "fit-content",
-                      }}
-                    >
-                      {isArabic ? "عن الهيئة" : "About"}
-                      <ChevronDown
-                        className={`h-4 w-4 transition-transform ${
-                          aboutDropdownOpen ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
+            {/* Desktop Search Bar */}
+            <div className="hidden lg:flex flex-1 max-w-md mx-8">
+              <SearchForm
+                className="w-full"
+                placeholder={isArabic ? "البحث..." : "Search..."}
+                onSearch={handleSearch}
+              />
+            </div>
 
-                    {/* Dropdown menu - Desktop & Mobile */}
-                    {aboutDropdownOpen && (
-                      <div
-                        className={`${
-                          isMobile
-                            ? "mt-1 bg-white rounded-lg border border-blue-100 overflow-hidden w-full"
-                            : "absolute top-full mt-1 bg-white rounded-lg shadow-lg border border-blue-100 overflow-hidden min-w-[200px] z-50"
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-1">
+              {navLinks.map((link, index) => {
+                if ("isAbout" in link) {
+                  return (
+                    <div key="about" className="relative" ref={dropdownRef}>
+                      <button
+                        onClick={toggleAboutDropdown}
+                        className={`group relative px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 flex items-center gap-1.5 ${
+                          aboutDropdownOpen
+                            ? "bg-slate-100/80 text-slate-900"
+                            : "text-slate-700 hover:text-slate-900 hover:bg-slate-50/80"
                         }`}
                       >
-                        {aboutDropdownItems.map((item) => (
-                          <Link
-                            key={item.href}
-                            href={item.href}
-                            className={`block py-2 
-                            ${
-                              isMobile
-                                ? `${isArabic ? "pr-8 pl-5" : "pl-8 pr-5"}`
-                                : "px-4"
-                            } 
-                            hover:bg-blue-50 transition-colors
-                            ${
-                              pathname === item.href
-                                ? "bg-blue-50 text-blue-600 font-medium"
-                                : "text-gray-700"
-                            }
-                            ${isArabic ? "text-right" : "text-left"}`}
-                            onClick={() => {
-                              setAboutDropdownOpen(false);
-                              setIsOpen(false);
-                            }}
-                          >
-                            {isArabic ? item.labelAr : item.labelEn}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                );
-              }
+                        <span className="relative z-10">{isArabic ? "عن الهيئة" : "About"}</span>
+                        <ChevronDown
+                          className={`h-4 w-4 transition-all duration-300 ${
+                            aboutDropdownOpen ? "rotate-180" : "group-hover:translate-y-0.5"
+                          }`}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      </button>
 
-              // Regular nav links
-              return link.scrollTo ? (
-                <button
-                  key={link.href}
-                  onClick={() => {
-                    const el = document.getElementById("services");
-                    if (el) {
-                      el.scrollIntoView({ behavior: "smooth", block: "start" });
-                      setIsOpen(false);
-                    } else {
-                      // navigate to home and scroll after
-                      window.location.href = `/#services`;
-                    }
-                  }}
-                  className={`py-2 px-4 rounded-lg transition-all duration-200 font-medium whitespace-nowrap
-                    ${
-                      pathname === "/" && currentHash === "#services"
-                        ? "bg-blue-500 text-white shadow-md hover:bg-blue-600"
-                        : "bg-gray-50 text-gray-800 hover:bg-blue-100 hover:text-blue-600"
+                      {aboutDropdownOpen && (
+                        <div className="absolute top-full mt-2 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-200/50 overflow-hidden min-w-[220px] z-50 animate-in slide-in-from-top-2 duration-200">
+                          <div className="p-2">
+                            {aboutDropdownItems.map((item) => (
+                              <Link
+                                key={item.href}
+                                href={item.href}
+                                className={`block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                                  pathname === item.href
+                                    ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700"
+                                    : "text-slate-700 hover:bg-slate-50/80 hover:text-slate-900"
+                                }`}
+                                onClick={() => {
+                                  setAboutDropdownOpen(false)
+                                  setIsOpen(false)
+                                }}
+                              >
+                                {isArabic ? item.labelAr : item.labelEn}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )
+                }
+
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`group relative px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ${
+                      pathname === link.href
+                        ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/25"
+                        : "text-slate-700 hover:text-slate-900 hover:bg-slate-50/80"
                     }`}
-                  style={{
-                    textAlign: isArabic ? "right" : "left",
-                    minWidth: "fit-content",
-                  }}
-                >
-                  {isArabic ? link.labelAr : link.labelEn}
-                </button>
-              ) : (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`py-2 px-4 rounded-lg transition-all duration-200 font-medium whitespace-nowrap
-                  ${
-                    pathname === link.href
-                      ? "bg-blue-500 text-white shadow-md hover:bg-blue-600"
-                      : "bg-gray-50 text-gray-800 hover:bg-blue-100 hover:text-blue-600"
-                  }`}
-                  style={{
-                    textAlign: isArabic ? "right" : "left",
-                    minWidth: "fit-content",
-                  }}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {isArabic ? link.labelAr : link.labelEn}
-                </Link>
-              );
-            })}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <span className="relative z-10">{isArabic ? link.labelAr : link.labelEn}</span>
+                    {pathname !== link.href && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    )}
+                  </Link>
+                )
+              })}
 
-            <DropdownMenu>
-              <DropdownMenuTrigger>Services</DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>Our Services</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <Link href="/Services">
-                <DropdownMenuItem>E-Government</DropdownMenuItem>
-                </Link>
-                <Link href="/Services">
-                  <DropdownMenuItem>
-                    Communications and Information Technology Regulation
-                  </DropdownMenuItem>
-                </Link>
-                <Link href="/cybersecurity">
-                  <DropdownMenuItem>Cybersecurity</DropdownMenuItem>
-                </Link>
-                <Link href="/digital-transformation">
-                  <DropdownMenuItem>Digital Transformation</DropdownMenuItem>
-                </Link>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              {/* Services Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger className="group relative px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 text-slate-700 hover:text-slate-900 hover:bg-slate-50/80 flex items-center gap-1.5">
+                  <span className="relative z-10">{isArabic ? "الخدمات" : "Services"}</span>
+                  <ChevronDown className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-white/95 backdrop-blur-xl border-slate-200/50 shadow-xl rounded-2xl p-2 min-w-[280px]">
+                  <DropdownMenuLabel className="text-slate-900 font-semibold px-3 py-2">
+                    {isArabic ? "خدماتنا" : "Our Services"}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-slate-200/60" />
+                  <Link href="/Services">
+                    <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
+                      {isArabic ? "الحكومة الإلكترونية" : "E-Government"}
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/Services">
+                    <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
+                      {isArabic ? "تنظيم الاتصالات وتقنية المعلومات" : "Communications and IT Regulation"}
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/cybersecurity">
+                    <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
+                      {isArabic ? "الأمن السيبراني" : "Cybersecurity"}
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/digital-transformation">
+                    <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
+                      {isArabic ? "التحول الرقمي" : "Digital Transformation"}
+                    </DropdownMenuItem>
+                  </Link>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Language Toggle */}
+              <button
+                onClick={toggleLanguage}
+                className="group relative p-2.5 rounded-xl font-medium text-sm transition-all duration-300 text-slate-700 hover:text-slate-900 hover:bg-slate-50/80"
+                title={isArabic ? "Switch to English" : "التبديل إلى العربية"}
+              >
+                <Globe className="h-4 w-4" />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </button>
+            </div>
+
+            {/* Mobile Controls */}
+            <div className="lg:hidden flex items-center space-x-2">
+              {/* Mobile Search Button */}
+              <button
+                onClick={toggleMobileSearch}
+                className="relative p-3 bg-slate-50/80 hover:bg-slate-100/80 rounded-2xl transition-all duration-300 hover:scale-105 group"
+                aria-label="Toggle search"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <Search size={18} className="text-slate-700" />
+                </div>
+              </button>
+
+              {/* Mobile Menu Button */}
+              <button
+                onClick={toggleNavbar}
+                className="relative p-3 bg-slate-50/80 hover:bg-slate-100/80 rounded-2xl transition-all duration-300 hover:scale-105 group"
+                aria-label="Toggle navigation menu"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  {isOpen ? <X size={20} className="text-slate-700" /> : <Menu size={20} className="text-slate-700" />}
+                </div>
+              </button>
+            </div>
           </div>
 
-          {/* Hamburger Button */}
-          <button
-            onClick={toggleNavbar}
-            className="lg:hidden p-2 ml-2 bg-gray-50 text-blue-500 rounded-lg hover:bg-blue-100 transition-colors border border-blue-200"
-            aria-label="Toggle navigation menu"
+          {/* Mobile Search Bar */}
+          {showMobileSearch && (
+            <div className="lg:hidden pb-4 animate-in slide-in-from-top-2 duration-200">
+              <SearchForm
+                className="w-full"
+                placeholder={isArabic ? "البحث..." : "Search..."}
+                onSearch={handleSearch}
+              />
+            </div>
+          )}
+
+          {/* Mobile Navigation */}
+          <div
+            className={`lg:hidden transition-all duration-500 ease-out overflow-hidden ${
+              isOpen ? "max-h-screen opacity-100 pb-6" : "max-h-0 opacity-0 pb-0"
+            }`}
           >
-            {isOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
+            <div className="bg-white/90 backdrop-blur-xl rounded-2xl border border-slate-200/50 shadow-xl p-4 mt-4 space-y-2">
+              {navLinks.map((link, index) => {
+                if ("isAbout" in link) {
+                  return (
+                    <div key="about" className="space-y-2">
+                      <button
+                        onClick={toggleAboutDropdown}
+                        className={`w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium text-sm transition-all duration-300 ${
+                          aboutDropdownOpen ? "bg-slate-100/80 text-slate-900" : "text-slate-700 hover:bg-slate-50/80"
+                        }`}
+                      >
+                        <span>{isArabic ? "عن الهيئة" : "About"}</span>
+                        <ChevronDown
+                          className={`h-4 w-4 transition-transform duration-300 ${
+                            aboutDropdownOpen ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+
+                      {aboutDropdownOpen && (
+                        <div className="pl-4 space-y-1 animate-in slide-in-from-top-2 duration-200">
+                          {aboutDropdownItems.map((item) => (
+                            <Link
+                              key={item.href}
+                              href={item.href}
+                              className={`block px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                                pathname === item.href
+                                  ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700"
+                                  : "text-slate-600 hover:bg-slate-50/80 hover:text-slate-900"
+                              }`}
+                              onClick={() => {
+                                setAboutDropdownOpen(false)
+                                setIsOpen(false)
+                              }}
+                            >
+                              {isArabic ? item.labelAr : item.labelEn}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )
+                }
+
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`block px-4 py-3 rounded-xl font-medium text-sm transition-all duration-300 ${
+                      pathname === link.href
+                        ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/25"
+                        : "text-slate-700 hover:bg-slate-50/80 hover:text-slate-900"
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {isArabic ? link.labelAr : link.labelEn}
+                  </Link>
+                )
+              })}
+
+              {/* Mobile Services */}
+              <div className="space-y-2">
+                <div className="px-4 py-3 text-sm font-semibold text-slate-900 bg-slate-50/80 rounded-xl">
+                  {isArabic ? "الخدمات" : "Services"}
+                </div>
+                <div className="pl-4 space-y-1">
+                  <Link
+                    href="/Services"
+                    className="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {isArabic ? "الحكومة الإلكترونية" : "E-Government"}
+                  </Link>
+                  <Link
+                    href="/Services"
+                    className="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {isArabic ? "تنظيم الاتصالات وتقنية المعلومات" : "Communications and IT Regulation"}
+                  </Link>
+                  <Link
+                    href="/cybersecurity"
+                    className="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {isArabic ? "الأمن السيبراني" : "Cybersecurity"}
+                  </Link>
+                  <Link
+                    href="/digital-transformation"
+                    className="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {isArabic ? "التحول الرقمي" : "Digital Transformation"}
+                  </Link>
+                </div>
+              </div>
+
+              {/* Mobile Language Toggle */}
+              <button
+                onClick={toggleLanguage}
+                className="w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium text-sm transition-all duration-300 text-slate-700 hover:bg-slate-50/80"
+              >
+                <span className="flex items-center gap-2">
+                  <Globe className="h-4 w-4" />
+                  {isArabic ? "Switch to English" : "التبديل إلى العربية"}
+                </span>
+              </button>
+            </div>
+          </div>
         </div>
       </nav>
-    </div>
-  );
-};
 
-export default Navbar;
+      {/* Spacer to prevent content from hiding behind fixed navbar */}
+      <div className="h-20" />
+    </div>
+  )
+}
+
+export default Navbar
