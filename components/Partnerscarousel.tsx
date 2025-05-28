@@ -9,37 +9,31 @@ const partners = [
     id: 1,
     name: "International Telecommunication Union",
     nameAr: "الاتحاد الدولي للاتصالات",
-    logo: "/placeholder.svg?height=80&width=120",
+    logo: "partners/ITU.png",
   },
   {
     id: 2,
-    name: "Arab States Broadcasting Union",
-    nameAr: "اتحاد إذاعات الدول العربية",
-    logo: "/placeholder.svg?height=80&width=120",
+    name: "LPTIC",
+    nameAr: "الشركة القايضة للإتصلات",
+    logo: "partners/LPTIC.png",
   },
   {
     id: 3,
-    name: "African Telecommunications Union",
-    nameAr: "الاتحاد الأفريقي للاتصالات",
-    logo: "/placeholder.svg?height=80&width=120",
+    name: "Al-Madar Al-Jadeed",
+    nameAr: "المدار الجديد",
+    logo: "partners/Madar.png",
   },
   {
     id: 4,
-    name: "League of Arab States",
-    nameAr: "جامعة الدول العربية",
-    logo: "/placeholder.svg?height=80&width=120",
+    name: "/LTT",
+    nameAr: "ليبيا لتقنية الإتصلات",
+    logo: "partners/LTT.png",
   },
   {
     id: 5,
-    name: "United Nations",
-    nameAr: "الأمم المتحدة",
-    logo: "/placeholder.svg?height=80&width=120",
-  },
-  {
-    id: 6,
-    name: "World Bank",
-    nameAr: "البنك الدولي",
-    logo: "/placeholder.svg?height=80&width=120",
+    name: "Hatif Libya",
+    nameAr: "هاتف ليبيا",
+    logo: "partners/Hatif-Libya.png",
   },
 ]
 
@@ -86,7 +80,7 @@ export default function PartnersCarousel() {
         </p>
       </div>
 
-      <div className="relative bg-white/60 backdrop-blur-sm rounded-2xl border border-blue-100 p-8">
+      <div className="relative bg-gradient-to-r from-blue-500 to-indigo-600 backdrop-blur-sm rounded-2xl border border-blue-100 p-8">
         <div className="overflow-hidden">
           <div
             className="flex transition-transform duration-500 ease-in-out"

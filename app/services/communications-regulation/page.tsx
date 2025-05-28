@@ -24,8 +24,8 @@ export default function CommunicationsRegulationPage() {
         <header
           className={`flex h-16 shrink-0 items-center gap-2 border-b border-blue-100 px-4 bg-blue-50 ${isArabic ? "flex-row-reverse" : ""}`}
         >
-          <SidebarTrigger className={`text-blue-600 hover:bg-blue-100 ${isArabic ? "mr-1" : "-ml-1"}`} />
-          <Separator orientation="vertical" className={`h-10 bg-blue-200 ${isArabic ? "ml-2" : "mr-2"}`} />
+          <SidebarTrigger className={`text-blue-600 hover:bg-blue-100 ${isArabic ? "ml-1" : "-ml-1"}`} />
+          <Separator orientation="vertical" className={`h-10 bg-blue-200 ${isArabic ? "mr-2" : "ml-2"}`} />
           <Breadcrumb>
             <BreadcrumbList className={isArabic ? "flex-row-reverse" : ""}>
               <BreadcrumbItem className="hidden md:block">

@@ -8,6 +8,8 @@ import { AccordionItem } from "@/components/ui/accordion"
 
 import { Accordion } from "@/components/ui/accordion"
 
+import Link from "next/link";
+
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight, Globe, Shield, Cpu, X, Network } from "lucide-react"
@@ -15,6 +17,7 @@ import { useLanguage } from "@/contexts/language-context"
 import AboutIntro from "@/components/about-intro"
 import StatisticsSection from "@/components/statistics-section"
 import PartnersCarousel from "@/components/Partnerscarousel"
+import EGovernmentPage from "./services/e-government/page"
 
 // Slide data for the carousel
 const slides = [
@@ -26,7 +29,7 @@ const slides = [
     descriptionAr: "نقود التحول الرقمي في المملكة من خلال تطوير البنية التحتية للاتصالات وتعزيز الابتكار التكنولوجي.",
     descriptionEn:
       "Leading the digital transformation in the Country through developing telecommunications infrastructure and promoting technological innovation.",
-  },
+    },
   {
     id: 2,
     imageUrl: "/hero-slideshow/slide-2.jpg",
@@ -35,7 +38,8 @@ const slides = [
     descriptionAr: "نوفر أحدث تقنيات الاتصال لضمان تجربة رقمية سلسة وسريعة لجميع المستخدمين.",
     descriptionEn:
       "We provide the latest communication technologies to ensure a smooth and fast digital experience for all users.",
-  },
+    
+    },
   {
     id: 3,
     imageUrl: "/hero-slideshow/slide-3.jpg",
@@ -113,6 +117,7 @@ const services = [
     ],
     additionalInfoAr: "مزيد من المعلومات باللغة العربية",
     additionalInfoEn: "More information in English",
+    href: "/communications",
   },
   {
     id: 2,
@@ -147,6 +152,7 @@ const services = [
     ],
     additionalInfoAr: "مزيد من المعلومات حول الحكومة الإلكترونية",
     additionalInfoEn: "More information about E-Government services",
+    href: "/e-government",
   },
   {
     id: 3,
@@ -176,6 +182,7 @@ const services = [
     `,
     additionalInfoAr: "مزيد من المعلومات حول الأمن السيبراني",
     additionalInfoEn: "More information about Cybersecurity services",
+    href: "/cybersecurity",
   },
   {
     id: 4,
@@ -205,6 +212,7 @@ const services = [
     `,
     additionalInfoAr: "مزيد من المعلومات حول التحول الرقمي",
     additionalInfoEn: "More information about Digital Transformation",
+    href: "/digital-transformation",
   },
 ]
 
@@ -277,7 +285,11 @@ export default function HomePage() {
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 ${isArabic ? "rtl" : "ltr"}`}>
+    <div
+      className={`min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 ${
+        isArabic ? "rtl" : "ltr"
+      }`}
+    >
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Slideshow/Carousel */}
         <div className="relative mb-16 rounded-2xl overflow-hidden shadow-2xl border border-blue-100">
@@ -287,11 +299,15 @@ export default function HomePage() {
               <div
                 key={slide.id}
                 className={`absolute inset-0 transition-opacity duration-1000 ${
-                  index === currentSlide ? "opacity-100" : "opacity-0 pointer-events-none"
+                  index === currentSlide
+                    ? "opacity-100"
+                    : "opacity-0 pointer-events-none"
                 }`}
               >
                 <Image
-                  src={slide.imageUrl || "/placeholder.svg?height=500&width=1200"}
+                  src={
+                    slide.imageUrl || "/placeholder.svg?height=500&width=1200"
+                  }
                   alt={isArabic ? slide.titleAr : slide.titleEn}
                   fill
                   className="object-cover"
@@ -331,11 +347,13 @@ export default function HomePage() {
               <button
                 key={index}
                 onClick={() => {
-                  setCurrentSlide(index)
-                  startSlideshow()
+                  setCurrentSlide(index);
+                  startSlideshow();
                 }}
                 className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
-                  index === currentSlide ? "bg-white scale-125 shadow-lg" : "bg-white/50 hover:bg-white/75"
+                  index === currentSlide
+                    ? "bg-white scale-125 shadow-lg"
+                    : "bg-white/50 hover:bg-white/75"
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
@@ -367,10 +385,9 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-0">
             {services.map((service) => (
-              <div
+             <Link href={service.href} // Ensure each service object includes a `slug`
                 key={service.id}
-                className="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-blue-100 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 hover:border-blue-300 cursor-pointer"
-                onClick={() => toggleService(service.id)}
+                className="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-blue-100 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 hover:border-blue-300 cursor-pointer no-underline"
               >
                 <div className="p-6" dir={isArabic ? "rtl" : "ltr"}>
                   <div className="flex justify-center mb-4">
@@ -385,128 +402,11 @@ export default function HomePage() {
                     {isArabic ? service.descriptionAr : service.descriptionEn}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
-
-          {/* Service Modal */}
-          {expandedService !== null && (
-            <>
-              {/* Backdrop */}
-              <div
-                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
-                onClick={() => setExpandedService(null)}
-              />
-
-              {/* Modal */}
-              <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-                <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-blue-200 w-[90%] md:w-2/3 lg:w-1/2 max-h-[90vh] overflow-y-auto relative">
-                  {/* Close button */}
-                  <button
-                    className="absolute top-4 right-4 p-2 text-white rounded-full bg-blue-500 hover:bg-blue-600 transition-colors z-10 shadow-lg"
-                    onClick={() => setExpandedService(null)}
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
-
-                  {/* Content */}
-                  {services
-                    .filter((service) => service.id === expandedService)
-                    .map((service) => (
-                      <div key={service.id} className="p-8 pt-12" dir={isArabic ? "rtl" : "ltr"}>
-                        <div className="flex justify-center mb-6">
-                          <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-lg">
-                            {service.icon}
-                          </div>
-                        </div>
-                        <h3 className="text-2xl font-bold mb-6 text-center text-slate-800">
-                          {isArabic ? service.titleAr : service.titleEn}
-                        </h3>
-
-                        {/* Accordion for Full Content */}
-                        <Accordion type="single" collapsible className="space-y-4">
-                          {/* Tasks and Responsibilities */}
-                          <AccordionItem value="task-responsibilities" className="border border-blue-200 rounded-xl">
-                            <AccordionTrigger className="px-6 py-4 hover:bg-blue-50 rounded-t-xl">
-                              <h4 className="font-semibold text-blue-800">
-                                {isArabic ? "المهام والمسؤوليات" : "Tasks and Responsibilities"}
-                              </h4>
-                            </AccordionTrigger>
-                            <AccordionContent className="px-6 pb-4">
-                              <div
-                                className="prose max-w-none text-slate-700 prose-headings:text-blue-800 prose-ul:text-slate-600"
-                                dangerouslySetInnerHTML={{
-                                  __html: isArabic ? service.fullContentAr : service.fullContentEn,
-                                }}
-                              />
-                            </AccordionContent>
-                          </AccordionItem>
-
-                          {/* Contact Information */}
-                          <AccordionItem value="contact-info" className="border border-blue-200 rounded-xl">
-                            <AccordionTrigger className="px-6 py-4 hover:bg-blue-50 rounded-t-xl">
-                              <h4 className="font-semibold text-blue-800">
-                                {isArabic ? "معلومات التواصل" : "Contact Information"}
-                              </h4>
-                            </AccordionTrigger>
-                            <AccordionContent className="px-6 pb-4">
-                              <div className="bg-blue-50 rounded-xl p-4">
-                                <p className="text-slate-700">
-                                  {isArabic
-                                    ? "للتواصل مع الإدارة عبر البريد الإلكتروني:"
-                                    : "To contact the administration, please email:"}{" "}
-                                  <a
-                                    href="mailto:reg@cim.gov.ly"
-                                    className="text-blue-600 hover:text-blue-800 font-medium underline"
-                                  >
-                                    reg@cim.gov.ly
-                                  </a>
-                                </p>
-                              </div>
-                            </AccordionContent>
-                          </AccordionItem>
-
-                          {/* Additional Information */}
-                          <AccordionItem value="more-info" className="border border-blue-200 rounded-xl">
-                            <AccordionTrigger className="px-6 py-4 hover:bg-blue-50 rounded-t-xl">
-                              <h4 className="font-semibold text-blue-800">
-                                {isArabic ? "مزيد من المعلومات" : "More Information"}
-                              </h4>
-                            </AccordionTrigger>
-                            <AccordionContent className="px-6 pb-4">
-                              <p className="text-slate-700">
-                                {isArabic ? service.additionalInfoAr : service.additionalInfoEn}
-                              </p>
-                            </AccordionContent>
-                          </AccordionItem>
-                        </Accordion>
-
-                        {/* Service navigation indicators */}
-                        <div className="flex justify-center mt-8 space-x-2">
-                          {services.map((s) => (
-                            <button
-                              key={s.id}
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                setExpandedService(s.id)
-                              }}
-                              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                                s.id === expandedService
-                                  ? "bg-blue-500 scale-125 shadow-lg"
-                                  : "bg-slate-300 hover:bg-blue-300"
-                              }`}
-                              aria-label={`Go to service ${isArabic ? s.titleAr : s.titleEn}`}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                </div>
-              </div>
-            </>
-          )}
         </section>
       </main>
     </div>
-  )
+  );
 }

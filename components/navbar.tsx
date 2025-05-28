@@ -59,9 +59,9 @@ export const Navbar = () => {
   }
 
   const aboutDropdownItems = [
-    { href: "/about/overview", labelAr: "نبذة عن الهيئة", labelEn: "Overview" },
-    { href: "/about/leadership", labelAr: "القيادة", labelEn: "Leadership" },
-    { href: "/app/itl-co-op", labelAr: "التعاون الدولي", labelEn: "International Co-op" }, // fixed
+    { href: "/About/overview", labelAr: "نبذة عن الهيئة", labelEn: "Overview" },
+    { href: "/About/leadership", labelAr: "القيادة", labelEn: "Leadership" },
+    { href: "/About/cooperation", labelAr: "التعاون الدولي", labelEn: "International Co-op" },
   ]
 
   const navLinks = [
@@ -83,12 +83,16 @@ export const Navbar = () => {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <div className="flex items-center group">
-              <div className="relative p-3 bg-gradient-to-br from-slate-50 to-white border border-slate-200/60 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg">
-                  <Image src="logo.png"
-                    alt="Logo"
-                    width={500}
-                    height={300}/> 
+              <div className="relative mx-5 p-3 bg-gradient-to-br from-slate-50 to-white border border-slate-200/60 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg overflow-hidden">
+                  <Image
+                    src="/logo.png"
+                    alt="GACI Logo"
+                    width={40}
+                    height={40}
+                    className="object-contain w-full h-full"
+                    priority
+                  />
                 </div>
               </div>
               <div className="ml-4">
@@ -183,19 +187,29 @@ export const Navbar = () => {
                     {isArabic ? "خدماتنا" : "Our Services"}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-slate-200/60" />
+                  <Link href="/services/communications-regulation">
+                    <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
+                      {isArabic ? "تنظيم الاتصالات" : "Communications Regulation"}
+                    </DropdownMenuItem>
+                  </Link>
                   <Link href="/services/e-government">
                     <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
                       {isArabic ? "الحكومة الإلكترونية" : "E-Government"}
                     </DropdownMenuItem>
                   </Link>
-                  <Link href="/services/communications">
-                    <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
-                      {isArabic ? "تنظيم الاتصالات وتقنية المعلومات" : "Communications and IT Regulation"}
-                    </DropdownMenuItem>
-                  </Link>
                   <Link href="/services/cybersecurity">
                     <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
                       {isArabic ? "الأمن السيبراني" : "Cybersecurity"}
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/services/digital-transformation">
+                    <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
+                      {isArabic ? "التحول الرقمي" : "Digital Transformation"}
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/services/sector-development">
+                    <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
+                      {isArabic ? "تطوير القطاع" : "Sector Development"}
                     </DropdownMenuItem>
                   </Link>
                 </DropdownMenuContent>
