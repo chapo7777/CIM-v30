@@ -1,88 +1,132 @@
 "use client"
 
-import { Card, CardContent } from "@/components/ui/card"
 import { useLanguage } from "@/contexts/language-context"
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts"
+import { useEffect, useState } from "react"
+
+interface StatisticProps {
+  value: number
+  label: string
+  suffix?: string
+  duration?: number
+}
+
+function AnimatedCounter({ value, label, suffix = "", duration = 2000 }: StatisticProps) {
+  const [count, setCount] = useState(0)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+        }
+      },
+      { threshold: 0.1 },
+    )
+
+    const element = document.getElementById(`stat-${label}`)
+    if (element) {
+      observer.observe(element)
+    }
+
+    return () => {
+      if (element) {
+        observer.unobserve(element)
+      }
+    }
+  }, [label])
+
+  useEffect(() => {
+    if (!isVisible) return
+
+    let startTime: number
+    const startValue = 0
+    const endValue = value
+
+    const animate = (currentTime: number) => {
+      if (!startTime) startTime = currentTime
+      const progress = Math.min((currentTime - startTime) / duration, 1)
+
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4)
+      const currentValue = Math.floor(startValue + (endValue - startValue) * easeOutQuart)
+
+      setCount(currentValue)
+
+      if (progress < 1) {
+        requestAnimationFrame(animate)
+      }
+    }
+
+    requestAnimationFrame(animate)
+  }, [isVisible, value, duration])
+
+  return (
+    <div id={`stat-${label}`} className="text-center group">
+      <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-blue-100 hover:border-blue-300 transition-all duration-300 hover:shadow-lg">
+        <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">
+          {count.toLocaleString()}
+          {suffix}
+        </div>
+        <div className="text-slate-600 font-medium">{label}</div>
+      </div>
+    </div>
+  )
+}
 
 export default function StatisticsSection() {
   const { isArabic } = useLanguage()
 
-  // Statistics data
-  const data = [
+  const statistics = [
     {
-      name: isArabic ? "البريد الالكتروني - الاتصالات" : "Email - Communications",
-      value: 23,
-      color: "#3b82f6",
+      value: 250000,
+      suffix: "+",
+      labelAr: "مستخدم مسجل",
+      labelEn: "Registered Users",
     },
     {
-      name: isArabic ? "المعلومات الدراسة - الصحف الالكترونية" : "Study Information - Electronic Newspapers",
-      value: 34,
-      color: "#10b981",
+      value: 1200000,
+      suffix: "+",
+      labelAr: "معاملة مكتملة",
+      labelEn: "Completed Transactions",
     },
     {
-      name: isArabic ? "المنتديات - التسوق" : "Forums - Shopping",
-      value: 7,
-      color: "#f59e0b",
+      value: 98,
+      suffix: "%",
+      labelAr: "معدل الرضا",
+      labelEn: "Satisfaction Rate",
     },
     {
-      name: isArabic ? "التواصل الاجتماعي - التشغيل والتنزيلات" : "Social Media - Operations and Downloads",
-      value: 36,
-      color: "#6366f1",
+      value: 24,
+      suffix: "/7",
+      labelAr: "خدمة مستمرة",
+      labelEn: "24/7 Service",
     },
   ]
 
   return (
-    <section className="py-12">
-  <div className="container mx-auto px-2 sm:px-4">
-    <h2 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-8 text-center text-blue-600">
-      {isArabic
-        ? "احصائيات استخدام شبكة المعلومات حسب الانشطة"
-        : "Information Network Usage Statistics by Activities"}
-    </h2>
-
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 items-center mb-8">
-      <div style={{ height: '50vh' }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              labelLine={true}
-              outerRadius={100}
-              fill="#8884d8"
-              dataKey="value"
-              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
-            </Pie>
-            <Tooltip formatter={(value) => `${value}%`} />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
+    <section className="mb-16">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          {isArabic ? "إحصائياتنا" : "Our Statistics"}
+        </h2>
+        <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          {isArabic
+            ? "أرقام تعكس التزامنا بتقديم خدمات متميزة وموثوقة"
+            : "Numbers that reflect our commitment to providing excellent and reliable services"}
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
-        {data.map((item, index) => (
-          <Card key={index} className="border-blue-200">
-            <CardContent className="p-4 sm:p-6 bg-white overflow-hidden">
-              <div className="flex flex-col items-center text-center">
-                <div
-                  className="w-12 sm:w-16 h-12 sm:h-16 rounded-full mb-2 sm:mb-4 flex items-center justify-center text-white text-lg sm:text-2xl font-bold"
-                  style={{ backgroundColor: item.color }}
-                >
-                  {item.value}%
-                </div>
-                <p className="text-blue-900 text-sm sm:text-base">{item.name}</p>
-              </div>
-            </CardContent>
-          </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {statistics.map((stat, index) => (
+          <AnimatedCounter
+            key={index}
+            value={stat.value}
+            suffix={stat.suffix}
+            label={isArabic ? stat.labelAr : stat.labelEn}
+            duration={2000 + index * 200}
+          />
         ))}
       </div>
-    </div>
-  </div>
-</section>
+    </section>
   )
 }

@@ -1,53 +1,37 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import type React from "react"
+import { createContext, useContext, useState, useEffect } from "react"
 
-type LanguageContextType = {
+interface LanguageContextType {
   isArabic: boolean
-  language: "ar" | "en"
-  direction: "rtl" | "ltr"
+  direction: "ltr" | "rtl"
   toggleLanguage: () => void
 }
 
-const LanguageContext = createContext<LanguageContextType>({
-  isArabic: false,
-  language: "en",
-  direction: "ltr",
-  toggleLanguage: () => {},
-})
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
-export const useLanguage = () => useContext(LanguageContext)
-
-interface LanguageProviderProps {
-  children: ReactNode
-}
-
-export const LanguageProvider = ({ children }: LanguageProviderProps) => {
+export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [isArabic, setIsArabic] = useState(false)
 
-  useEffect(() => {
-    const storedLang = localStorage.getItem("language")
-    setIsArabic(storedLang === "ar")
-
-    // Apply direction to the document
-    document.documentElement.dir = storedLang === "ar" ? "rtl" : "ltr"
-  }, [])
-
   const toggleLanguage = () => {
-    setIsArabic((prev) => {
-      const newLang = !prev ? "ar" : "en"
-      localStorage.setItem("language", newLang)
-      document.documentElement.dir = newLang === "ar" ? "rtl" : "ltr"
-      return !prev
-    })
+    setIsArabic(!isArabic)
   }
 
-  const language = isArabic ? "ar" : "en"
   const direction = isArabic ? "rtl" : "ltr"
 
-  return (
-    <LanguageContext.Provider value={{ isArabic, language, direction, toggleLanguage }}>
-      {children}
-    </LanguageContext.Provider>
-  )
+  useEffect(() => {
+    document.documentElement.dir = direction
+    document.documentElement.lang = isArabic ? "ar" : "en"
+  }, [direction, isArabic])
+
+  return <LanguageContext.Provider value={{ isArabic, direction, toggleLanguage }}>{children}</LanguageContext.Provider>
+}
+
+export function useLanguage() {
+  const context = useContext(LanguageContext)
+  if (context === undefined) {
+    throw new Error("useLanguage must be used within a LanguageProvider")
+  }
+  return context
 }

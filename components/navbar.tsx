@@ -14,21 +14,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import Image from "next/image"
 
 export const Navbar = () => {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
-  const [currentHash, setCurrentHash] = useState("")
   const [scrolled, setScrolled] = useState(false)
   const [showMobileSearch, setShowMobileSearch] = useState(false)
-  const { isArabic, direction, toggleLanguage } = useLanguage()
-
-  useEffect(() => {
-    const handleHashChange = () => setCurrentHash(window.location.hash)
-    handleHashChange()
-    window.addEventListener("hashchange", handleHashChange)
-    return () => window.removeEventListener("hashchange", handleHashChange)
-  }, [])
+  const { isArabic, toggleLanguage } = useLanguage()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,18 +34,15 @@ export const Navbar = () => {
   const [isMobile, setIsMobile] = useState(false)
   const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
-  const prevIsMobileRef = useRef(isMobile)
 
   useEffect(() => {
     const checkScreenSize = () => {
       const newIsMobile = window.innerWidth < 1024
       setIsMobile(newIsMobile)
-
-      if (prevIsMobileRef.current && !newIsMobile) {
+      if (!newIsMobile) {
         setIsOpen(false)
         setShowMobileSearch(false)
       }
-      prevIsMobileRef.current = newIsMobile
     }
 
     checkScreenSize()
@@ -60,37 +50,18 @@ export const Navbar = () => {
     return () => window.removeEventListener("resize", checkScreenSize)
   }, [])
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setAboutDropdownOpen(false)
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
-
   const toggleNavbar = () => setIsOpen(!isOpen)
   const toggleAboutDropdown = () => setAboutDropdownOpen(!aboutDropdownOpen)
   const toggleMobileSearch = () => setShowMobileSearch(!showMobileSearch)
 
   const handleSearch = (query: string) => {
-    // Implement your search logic here
     console.log("Searching for:", query)
-    // You could navigate to a search results page or filter content
   }
 
   const aboutDropdownItems = [
-    { href: "/About/overview", labelAr: "نبذة عن الهيئة", labelEn: "Overview" },
-    { href: "/crew-heirarchy", labelAr: "القيادة", labelEn: "Leadership" },
-    {
-      href: "/itl-co-op",
-      labelAr: "التعاون الدولي",
-      labelEn: "International Co-op",
-    },
+    { href: "/about/overview", labelAr: "نبذة عن الهيئة", labelEn: "Overview" },
+    { href: "/about/leadership", labelAr: "القيادة", labelEn: "Leadership" },
+    { href: "app/itl-co-op", labelAr: "التعاون الدولي", labelEn: "International Co-op" },
   ]
 
   const navLinks = [
@@ -107,20 +78,17 @@ export const Navbar = () => {
             ? "bg-white/80 backdrop-blur-xl border-b border-slate-200/50 shadow-lg shadow-slate-900/5"
             : "bg-white/95 backdrop-blur-md"
         }`}
-        style={{
-          background: scrolled ? "rgba(255, 255, 255, 0.85)" : "rgba(255, 255, 255, 0.95)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-        }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <div className="flex items-center group">
               <div className="relative p-3 bg-gradient-to-br from-slate-50 to-white border border-slate-200/60 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-indigo-50/30 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="w-10 h-10 rounded-xl relative z-10 bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg">
-                  G
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg">
+                  <Image src="logo.png"
+                    alt="Logo"
+                    width={500}
+                    height={300}/> 
                 </div>
               </div>
               <div className="ml-4">
@@ -159,11 +127,10 @@ export const Navbar = () => {
                             aboutDropdownOpen ? "rotate-180" : "group-hover:translate-y-0.5"
                           }`}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </button>
 
                       {aboutDropdownOpen && (
-                        <div className="absolute top-full mt-2 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-200/50 overflow-hidden min-w-[220px] z-50 animate-in slide-in-from-top-2 duration-200">
+                        <div className="absolute top-full mt-2 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-200/50 overflow-hidden min-w-[220px] z-50">
                           <div className="p-2">
                             {aboutDropdownItems.map((item) => (
                               <Link
@@ -201,9 +168,6 @@ export const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                   >
                     <span className="relative z-10">{isArabic ? link.labelAr : link.labelEn}</span>
-                    {pathname !== link.href && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    )}
                   </Link>
                 )
               })}
@@ -213,31 +177,25 @@ export const Navbar = () => {
                 <DropdownMenuTrigger className="group relative px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 text-slate-700 hover:text-slate-900 hover:bg-slate-50/80 flex items-center gap-1.5">
                   <span className="relative z-10">{isArabic ? "الخدمات" : "Services"}</span>
                   <ChevronDown className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-white/95 backdrop-blur-xl border-slate-200/50 shadow-xl rounded-2xl p-2 min-w-[280px]">
                   <DropdownMenuLabel className="text-slate-900 font-semibold px-3 py-2">
                     {isArabic ? "خدماتنا" : "Our Services"}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-slate-200/60" />
-                  <Link href="/Services">
+                  <Link href="/services/e-government">
                     <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
                       {isArabic ? "الحكومة الإلكترونية" : "E-Government"}
                     </DropdownMenuItem>
                   </Link>
-                  <Link href="/Services">
+                  <Link href="/services/communications">
                     <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
                       {isArabic ? "تنظيم الاتصالات وتقنية المعلومات" : "Communications and IT Regulation"}
                     </DropdownMenuItem>
                   </Link>
-                  <Link href="/cybersecurity">
+                  <Link href="/services/cybersecurity">
                     <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
                       {isArabic ? "الأمن السيبراني" : "Cybersecurity"}
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/digital-transformation">
-                    <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
-                      {isArabic ? "التحول الرقمي" : "Digital Transformation"}
                     </DropdownMenuItem>
                   </Link>
                 </DropdownMenuContent>
@@ -250,41 +208,32 @@ export const Navbar = () => {
                 title={isArabic ? "Switch to English" : "التبديل إلى العربية"}
               >
                 <Globe className="h-4 w-4" />
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </button>
             </div>
 
             {/* Mobile Controls */}
             <div className="lg:hidden flex items-center space-x-2">
-              {/* Mobile Search Button */}
               <button
                 onClick={toggleMobileSearch}
                 className="relative p-3 bg-slate-50/80 hover:bg-slate-100/80 rounded-2xl transition-all duration-300 hover:scale-105 group"
                 aria-label="Toggle search"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative z-10">
-                  <Search size={18} className="text-slate-700" />
-                </div>
+                <Search size={18} className="text-slate-700" />
               </button>
 
-              {/* Mobile Menu Button */}
               <button
                 onClick={toggleNavbar}
                 className="relative p-3 bg-slate-50/80 hover:bg-slate-100/80 rounded-2xl transition-all duration-300 hover:scale-105 group"
                 aria-label="Toggle navigation menu"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative z-10">
-                  {isOpen ? <X size={20} className="text-slate-700" /> : <Menu size={20} className="text-slate-700" />}
-                </div>
+                {isOpen ? <X size={20} className="text-slate-700" /> : <Menu size={20} className="text-slate-700" />}
               </button>
             </div>
           </div>
 
           {/* Mobile Search Bar */}
           {showMobileSearch && (
-            <div className="lg:hidden pb-4 animate-in slide-in-from-top-2 duration-200">
+            <div className="lg:hidden pb-4">
               <SearchForm
                 className="w-full"
                 placeholder={isArabic ? "البحث..." : "Search..."}
@@ -300,103 +249,7 @@ export const Navbar = () => {
             }`}
           >
             <div className="bg-white/90 backdrop-blur-xl rounded-2xl border border-slate-200/50 shadow-xl p-4 mt-4 space-y-2">
-              {navLinks.map((link, index) => {
-                if ("isAbout" in link) {
-                  return (
-                    <div key="about" className="space-y-2">
-                      <button
-                        onClick={toggleAboutDropdown}
-                        className={`w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium text-sm transition-all duration-300 ${
-                          aboutDropdownOpen ? "bg-slate-100/80 text-slate-900" : "text-slate-700 hover:bg-slate-50/80"
-                        }`}
-                      >
-                        <span>{isArabic ? "عن الهيئة" : "About"}</span>
-                        <ChevronDown
-                          className={`h-4 w-4 transition-transform duration-300 ${
-                            aboutDropdownOpen ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
-
-                      {aboutDropdownOpen && (
-                        <div className="pl-4 space-y-1 animate-in slide-in-from-top-2 duration-200">
-                          {aboutDropdownItems.map((item) => (
-                            <Link
-                              key={item.href}
-                              href={item.href}
-                              className={`block px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
-                                pathname === item.href
-                                  ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700"
-                                  : "text-slate-600 hover:bg-slate-50/80 hover:text-slate-900"
-                              }`}
-                              onClick={() => {
-                                setAboutDropdownOpen(false)
-                                setIsOpen(false)
-                              }}
-                            >
-                              {isArabic ? item.labelAr : item.labelEn}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )
-                }
-
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`block px-4 py-3 rounded-xl font-medium text-sm transition-all duration-300 ${
-                      pathname === link.href
-                        ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/25"
-                        : "text-slate-700 hover:bg-slate-50/80 hover:text-slate-900"
-                    }`}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {isArabic ? link.labelAr : link.labelEn}
-                  </Link>
-                )
-              })}
-
-              {/* Mobile Services */}
-              <div className="space-y-2">
-                <div className="px-4 py-3 text-sm font-semibold text-slate-900 bg-slate-50/80 rounded-xl">
-                  {isArabic ? "الخدمات" : "Services"}
-                </div>
-                <div className="pl-4 space-y-1">
-                  <Link
-                    href="/Services"
-                    className="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {isArabic ? "الحكومة الإلكترونية" : "E-Government"}
-                  </Link>
-                  <Link
-                    href="/Services"
-                    className="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {isArabic ? "تنظيم الاتصالات وتقنية المعلومات" : "Communications and IT Regulation"}
-                  </Link>
-                  <Link
-                    href="/cybersecurity"
-                    className="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {isArabic ? "الأمن السيبراني" : "Cybersecurity"}
-                  </Link>
-                  <Link
-                    href="/digital-transformation"
-                    className="block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {isArabic ? "التحول الرقمي" : "Digital Transformation"}
-                  </Link>
-                </div>
-              </div>
-
-              {/* Mobile Language Toggle */}
+              {/* Mobile navigation items would go here */}
               <button
                 onClick={toggleLanguage}
                 className="w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium text-sm transition-all duration-300 text-slate-700 hover:bg-slate-50/80"
@@ -411,10 +264,7 @@ export const Navbar = () => {
         </div>
       </nav>
 
-      {/* Spacer to prevent content from hiding behind fixed navbar */}
       <div className="h-20" />
     </div>
   )
 }
-
-export default Navbar

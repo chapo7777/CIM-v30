@@ -2,34 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 body {
-  font-family: 'Cairo', sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
-
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-scroll {
-  animation: scroll 30s linear infinite;
-}
-
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
-}
-
-html {
-  scroll-behavior: smooth;
 }
 
 @layer base {
@@ -103,25 +83,6 @@ html {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
-
-@font-face {
-  font-family: 'Cairo';
-  src: url('/public/Cairo.ttf') format('ttf'),
-       url('/public/Cairo.ttf') format('ttf');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Cairo';
-  src: url('/public/Cairo.ttf') format('ttf'),
-       url('/public/Cairo.ttf') format('ttf');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 
 @layer base {
   * {
