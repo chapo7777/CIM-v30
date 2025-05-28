@@ -61,7 +61,7 @@ export const Navbar = () => {
   const aboutDropdownItems = [
     { href: "/about/overview", labelAr: "نبذة عن الهيئة", labelEn: "Overview" },
     { href: "/about/leadership", labelAr: "القيادة", labelEn: "Leadership" },
-    { href: "app/itl-co-op", labelAr: "التعاون الدولي", labelEn: "International Co-op" },
+    { href: "/app/itl-co-op", labelAr: "التعاون الدولي", labelEn: "International Co-op" }, // fixed
   ]
 
   const navLinks = [
