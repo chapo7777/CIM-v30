@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useState, useEffect, useRef } from "react"
-import { Menu, X, ChevronDown, Globe, Search } from "lucide-react"
-import { useLanguage } from "@/contexts/language-context"
-import { SearchForm } from "@/components/search-form"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
+import { Menu, X, ChevronDown, Globe, Search } from "lucide-react";
+import { useLanguage } from "@/contexts/language-context";
+import { SearchForm } from "@/components/search-form";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,62 +13,101 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import Image from "next/image"
+} from "@/components/ui/dropdown-menu";
+import Image from "next/image";
+import { ContactFormPopup } from "./contact-form-popup";
+import { useContactForm } from "@/hooks/use-contact-form";
+import { Button } from "@/components/ui/button";
 
 export const Navbar = () => {
-  const pathname = usePathname()
-  const [isOpen, setIsOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const [showMobileSearch, setShowMobileSearch] = useState(false)
-  const { isArabic, toggleLanguage } = useLanguage()
+  const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
+  const { isArabic, toggleLanguage } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  const [isMobile, setIsMobile] = useState(false)
-  const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
+  const [isMobile, setIsMobile] = useState(false);
+  const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false);
+  const [mobileAboutOpen, setMobileAboutOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkScreenSize = () => {
-      const newIsMobile = window.innerWidth < 1024
-      setIsMobile(newIsMobile)
+      const newIsMobile = window.innerWidth < 1024;
+      setIsMobile(newIsMobile);
       if (!newIsMobile) {
-        setIsOpen(false)
-        setShowMobileSearch(false)
+        setIsOpen(false);
+        setShowMobileSearch(false);
       }
-    }
+    };
 
-    checkScreenSize()
-    window.addEventListener("resize", checkScreenSize)
-    return () => window.removeEventListener("resize", checkScreenSize)
-  }, [])
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
 
-  const toggleNavbar = () => setIsOpen(!isOpen)
-  const toggleAboutDropdown = () => setAboutDropdownOpen(!aboutDropdownOpen)
-  const toggleMobileSearch = () => setShowMobileSearch(!showMobileSearch)
+  const toggleNavbar = () => setIsOpen(!isOpen);
+  const toggleAboutDropdown = () => setAboutDropdownOpen(!aboutDropdownOpen);
+  const toggleMobileSearch = () => setShowMobileSearch(!showMobileSearch);
 
   const handleSearch = (query: string) => {
-    console.log("Searching for:", query)
-  }
+    console.log("Searching for:", query);
+  };
 
   const aboutDropdownItems = [
-    { href: "/About/overview", labelAr: "نبذة عن الهيئة", labelEn: "Overview" },
-    { href: "/About/leadership", labelAr: "القيادة", labelEn: "Leadership" },
-    { href: "/About/cooperation", labelAr: "التعاون الدولي", labelEn: "International Co-op" },
-  ]
+    { href: "/about/overview", labelAr: "نبذة عن الهيئة", labelEn: "Overview" },
+    { href: "/about/leadership", labelAr: "القيادة", labelEn: "Leadership" },
+    {
+      href: "/about/cooperation",
+      labelAr: "التعاون الدولي",
+      labelEn: "International Co-op",
+    },
+  ];
+
+  const serviceItems = [
+    {
+      href: "/services/communications-regulation",
+      labelAr: "تنظيم الاتصالات",
+      labelEn: "Communications Regulation",
+    },
+    {
+      href: "/services/e-government",
+      labelAr: "الحكومة الإلكترونية",
+      labelEn: "E-Government",
+    },
+    {
+      href: "/services/cybersecurity",
+      labelAr: "الأمن السيبراني",
+      labelEn: "Cybersecurity",
+    },
+    {
+      href: "/services/digital-transformation",
+      labelAr: "التحول الرقمي",
+      labelEn: "Digital Transformation",
+    },
+  ];
 
   const navLinks = [
     { href: "/", labelAr: "الرئيسية", labelEn: "Home" },
     { isAbout: true },
     { href: "/news", labelAr: "المركز الإعلامي", labelEn: "News" },
-  ]
+  ];
+
+  const {
+    isContactFormOpen,
+    defaultSector,
+    openContactForm,
+    closeContactForm,
+  } = useContactForm();
 
   return (
     <div className="relative">
@@ -125,10 +164,14 @@ export const Navbar = () => {
                             : "text-slate-700 hover:text-slate-900 hover:bg-slate-50/80"
                         }`}
                       >
-                        <span className="relative z-10">{isArabic ? "عن الهيئة" : "About"}</span>
+                        <span className="relative z-10">
+                          {isArabic ? "عن الهيئة" : "About"}
+                        </span>
                         <ChevronDown
                           className={`h-4 w-4 transition-all duration-300 ${
-                            aboutDropdownOpen ? "rotate-180" : "group-hover:translate-y-0.5"
+                            aboutDropdownOpen
+                              ? "rotate-180"
+                              : "group-hover:translate-y-0.5"
                           }`}
                         />
                       </button>
@@ -146,8 +189,8 @@ export const Navbar = () => {
                                     : "text-slate-700 hover:bg-slate-50/80 hover:text-slate-900"
                                 }`}
                                 onClick={() => {
-                                  setAboutDropdownOpen(false)
-                                  setIsOpen(false)
+                                  setAboutDropdownOpen(false);
+                                  setIsOpen(false);
                                 }}
                               >
                                 {isArabic ? item.labelAr : item.labelEn}
@@ -157,7 +200,7 @@ export const Navbar = () => {
                         </div>
                       )}
                     </div>
-                  )
+                  );
                 }
 
                 return (
@@ -171,15 +214,19 @@ export const Navbar = () => {
                     }`}
                     onClick={() => setIsOpen(false)}
                   >
-                    <span className="relative z-10">{isArabic ? link.labelAr : link.labelEn}</span>
+                    <span className="relative z-10">
+                      {isArabic ? link.labelAr : link.labelEn}
+                    </span>
                   </Link>
-                )
+                );
               })}
 
               {/* Services Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger className="group relative px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 text-slate-700 hover:text-slate-900 hover:bg-slate-50/80 flex items-center gap-1.5">
-                  <span className="relative z-10">{isArabic ? "الخدمات" : "Services"}</span>
+                  <span className="relative z-10">
+                    {isArabic ? "الخدمات" : "Services"}
+                  </span>
                   <ChevronDown className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-white/95 backdrop-blur-xl border-slate-200/50 shadow-xl rounded-2xl p-2 min-w-[280px]">
@@ -187,33 +234,23 @@ export const Navbar = () => {
                     {isArabic ? "خدماتنا" : "Our Services"}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-slate-200/60" />
-                  <Link href="/services/communications-regulation">
-                    <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
-                      {isArabic ? "تنظيم الاتصالات" : "Communications Regulation"}
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/services/e-government">
-                    <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
-                      {isArabic ? "الحكومة الإلكترونية" : "E-Government"}
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/services/cybersecurity">
-                    <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
-                      {isArabic ? "الأمن السيبراني" : "Cybersecurity"}
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/services/digital-transformation">
-                    <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
-                      {isArabic ? "التحول الرقمي" : "Digital Transformation"}
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/services/sector-development">
-                    <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
-                      {isArabic ? "تطوير القطاع" : "Sector Development"}
-                    </DropdownMenuItem>
-                  </Link>
+                  {serviceItems.map((service) => (
+                    <Link key={service.href} href={service.href}>
+                      <DropdownMenuItem className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 transition-colors duration-200">
+                        {isArabic ? service.labelAr : service.labelEn}
+                      </DropdownMenuItem>
+                    </Link>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
+
+              {/* 📌 Contact Us Button */}
+              <Button
+                onClick={openContactForm}
+                className="ml-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-sm hover:shadow-md hover:brightness-110 transition-all duration-300 rounded-xl px-4 py-2 text-sm font-medium"
+              >
+                {isArabic ? "تواصل معنا" : "Contact Us"}
+              </Button>
 
               {/* Language Toggle */}
               <button
@@ -224,7 +261,6 @@ export const Navbar = () => {
                 <Globe className="h-4 w-4" />
               </button>
             </div>
-
             {/* Mobile Controls */}
             <div className="lg:hidden flex items-center space-x-2">
               <button
@@ -240,7 +276,11 @@ export const Navbar = () => {
                 className="relative p-3 bg-slate-50/80 hover:bg-slate-100/80 rounded-2xl transition-all duration-300 hover:scale-105 group"
                 aria-label="Toggle navigation menu"
               >
-                {isOpen ? <X size={20} className="text-slate-700" /> : <Menu size={20} className="text-slate-700" />}
+                {isOpen ? (
+                  <X size={20} className="text-slate-700" />
+                ) : (
+                  <Menu size={20} className="text-slate-700" />
+                )}
               </button>
             </div>
           </div>
@@ -259,11 +299,105 @@ export const Navbar = () => {
           {/* Mobile Navigation */}
           <div
             className={`lg:hidden transition-all duration-500 ease-out overflow-hidden ${
-              isOpen ? "max-h-screen opacity-100 pb-6" : "max-h-0 opacity-0 pb-0"
+              isOpen
+                ? "max-h-screen opacity-100 pb-6"
+                : "max-h-0 opacity-0 pb-0"
             }`}
           >
             <div className="bg-white/90 backdrop-blur-xl rounded-2xl border border-slate-200/50 shadow-xl p-4 mt-4 space-y-2">
-              {/* Mobile navigation items would go here */}
+              {/* Home Link */}
+              <Link
+                href="/"
+                className={`w-full flex items-center px-4 py-3 rounded-xl font-medium text-sm transition-all duration-300 ${
+                  pathname === "/"
+                    ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white"
+                    : "text-slate-700 hover:bg-slate-50/80"
+                }`}
+                onClick={() => setIsOpen(false)}
+              >
+                {isArabic ? "الرئيسية" : "Home"}
+              </Link>
+
+              {/* About Dropdown */}
+              <div>
+                <button
+                  onClick={() => setMobileAboutOpen(!mobileAboutOpen)}
+                  className="w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium text-sm transition-all duration-300 text-slate-700 hover:bg-slate-50/80"
+                >
+                  <span>{isArabic ? "عن الهيئة" : "About"}</span>
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform duration-300 ${
+                      mobileAboutOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                {mobileAboutOpen && (
+                  <div className="ml-4 mt-2 space-y-1">
+                    {aboutDropdownItems.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={`block px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                          pathname === item.href
+                            ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700"
+                            : "text-slate-600 hover:bg-slate-50/80 hover:text-slate-900"
+                        }`}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {isArabic ? item.labelAr : item.labelEn}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Services Dropdown */}
+              <div>
+                <button
+                  onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                  className="w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium text-sm transition-all duration-300 text-slate-700 hover:bg-slate-50/80"
+                >
+                  <span>{isArabic ? "الخدمات" : "Services"}</span>
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform duration-300 ${
+                      mobileServicesOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                {mobileServicesOpen && (
+                  <div className="ml-4 mt-2 space-y-1">
+                    {serviceItems.map((service) => (
+                      <Link
+                        key={service.href}
+                        href={service.href}
+                        className={`block px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                          pathname === service.href
+                            ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700"
+                            : "text-slate-600 hover:bg-slate-50/80 hover:text-slate-900"
+                        }`}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {isArabic ? service.labelAr : service.labelEn}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* News Link */}
+              <Link
+                href="/news"
+                className={`w-full flex items-center px-4 py-3 rounded-xl font-medium text-sm transition-all duration-300 ${
+                  pathname === "/news"
+                    ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white"
+                    : "text-slate-700 hover:bg-slate-50/80"
+                }`}
+                onClick={() => setIsOpen(false)}
+              >
+                {isArabic ? "المركز الإعلامي" : "News"}
+              </Link>
+
+              {/* Language Toggle */}
               <button
                 onClick={toggleLanguage}
                 className="w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium text-sm transition-all duration-300 text-slate-700 hover:bg-slate-50/80"
@@ -277,8 +411,13 @@ export const Navbar = () => {
           </div>
         </div>
       </nav>
-
+      {/* Contact Form Modal */}
+      <ContactFormPopup
+        isOpen={isContactFormOpen}
+        onClose={closeContactForm}
+        defaultSector={defaultSector}
+      />
       <div className="h-20" />
     </div>
-  )
-}
+  );
+};

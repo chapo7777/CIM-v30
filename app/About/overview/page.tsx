@@ -1,8 +1,15 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { motion } from "framer-motion"
-import { useLanguage } from "@/contexts/language-context"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { useLanguage } from "@/contexts/language-context";
 import {
   Building2,
   Globe,
@@ -15,14 +22,14 @@ import {
   FileText,
   Scale,
   TrendingUp,
-} from "lucide-react"
-import { Navbar } from "@/components/navbar"
+} from "lucide-react";
+import { Navbar } from "@/components/navbar";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.6 },
-}
+};
 
 const staggerContainer = {
   animate: {
@@ -30,10 +37,10 @@ const staggerContainer = {
       staggerChildren: 0.1,
     },
   },
-}
+};
 
 export default function AboutPage() {
-  const { isArabic } = useLanguage()
+  const { isArabic } = useLanguage();
 
   const responsibilities = [
     {
@@ -150,7 +157,7 @@ export default function AboutPage() {
         },
       ],
     },
-  ]
+  ];
 
   const stats = [
     {
@@ -177,7 +184,7 @@ export default function AboutPage() {
       labelEn: "Operations",
       labelAr: "العمليات",
     },
-  ]
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
@@ -194,7 +201,9 @@ export default function AboutPage() {
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-100 to-indigo-100 px-4 py-2 rounded-full mb-6">
             <Building2 className="w-5 h-5 text-blue-600" />
             <span className="text-sm font-medium text-blue-700">
-              {isArabic ? "الهيئة العامة للاتصالات" : "General Authority for Communications"}
+              {isArabic
+                ? "الهيئة العامة للاتصالات"
+                : "General Authority for Communications"}
             </span>
           </div>
 
@@ -217,7 +226,7 @@ export default function AboutPage() {
           animate="animate"
         >
           {stats.map((stat, index) => {
-            const Icon = stat.icon
+            const Icon = stat.icon;
             return (
               <motion.div key={index} variants={fadeInUp}>
                 <Card className="bg-white/60 backdrop-blur-sm border-slate-200/50 hover:shadow-lg transition-all duration-300 text-center">
@@ -225,17 +234,26 @@ export default function AboutPage() {
                     <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                       <Icon className="w-6 h-6 text-white" />
                     </div>
-                    <div className="text-2xl font-bold text-slate-800 mb-1">{stat.value}</div>
-                    <div className="text-sm text-slate-600">{isArabic ? stat.labelAr : stat.labelEn}</div>
+                    <div className="text-2xl font-bold text-slate-800 mb-1">
+                      {stat.value}
+                    </div>
+                    <div className="text-sm text-slate-600">
+                      {isArabic ? stat.labelAr : stat.labelEn}
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>
-            )
+            );
           })}
         </motion.div>
 
         {/* About Section */}
-        <motion.div className="mb-16" variants={fadeInUp} initial="initial" animate="animate">
+        <motion.div
+          className="mb-16"
+          variants={fadeInUp}
+          initial="initial"
+          animate="animate"
+        >
           <Card className="bg-white/60 backdrop-blur-sm border-slate-200/50 shadow-xl">
             <CardHeader className="text-center pb-8">
               <CardTitle className="text-3xl font-bold text-slate-800 mb-4">
@@ -269,7 +287,9 @@ export default function AboutPage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
-                      {isArabic ? "إنجاز مشاريع استراتيجية مهمة" : "Completed important strategic projects"}
+                      {isArabic
+                        ? "إنجاز مشاريع استراتيجية مهمة"
+                        : "Completed important strategic projects"}
                     </li>
                   </ul>
                 </div>
@@ -304,9 +324,13 @@ export default function AboutPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {responsibilities.map((category, index) => {
-              const Icon = category.icon
+              const Icon = category.icon;
               return (
-                <motion.div key={index} variants={fadeInUp} transition={{ delay: index * 0.1 }}>
+                <motion.div
+                  key={index}
+                  variants={fadeInUp}
+                  transition={{ delay: index * 0.1 }}
+                >
                   <Card className="bg-white/60 backdrop-blur-sm border-slate-200/50 hover:shadow-lg transition-all duration-300 h-full">
                     <CardHeader>
                       <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-4">
@@ -319,25 +343,37 @@ export default function AboutPage() {
                     <CardContent>
                       <ul className="space-y-3">
                         {category.items.map((item, itemIndex) => (
-                          <li key={itemIndex} className="flex items-start gap-2 text-sm text-slate-600">
+                          <li
+                            key={itemIndex}
+                            className="flex items-start gap-2 text-sm text-slate-600"
+                          >
                             <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
-                            <span className="leading-relaxed">{isArabic ? item.ar : item.en}</span>
+                            <span className="leading-relaxed">
+                              {isArabic ? item.ar : item.en}
+                            </span>
                           </li>
                         ))}
                       </ul>
                     </CardContent>
                   </Card>
                 </motion.div>
-              )
+              );
             })}
           </div>
         </motion.div>
 
         {/* Call to Action */}
-        <motion.div className="mt-16 text-center" variants={fadeInUp} initial="initial" animate="animate">
+        <motion.div
+          className="mt-16 text-center"
+          variants={fadeInUp}
+          initial="initial"
+          animate="animate"
+        >
           <Card className="bg-gradient-to-br from-blue-500 to-indigo-600 border-0 text-white">
             <CardContent className="p-12">
-              <h3 className="text-2xl font-bold mb-4">{isArabic ? "تواصل معنا" : "Get in Touch"}</h3>
+              <h3 className="text-2xl font-bold mb-4">
+                {isArabic ? "تواصل معنا" : "Get in Touch"}
+              </h3>
               <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
                 {isArabic
                   ? "نحن هنا لخدمتكم وتقديم أفضل الحلول في مجال الاتصالات وتقنية المعلومات"
@@ -347,14 +383,16 @@ export default function AboutPage() {
                 <button className="px-6 py-3 bg-white text-blue-600 rounded-xl font-medium hover:bg-blue-50 transition-colors duration-200">
                   {isArabic ? "اتصل بنا" : "Contact Us"}
                 </button>
-                <button className="px-6 py-3 border border-white/30 text-white rounded-xl font-medium hover:bg-white/10 transition-colors duration-200">
-                  {isArabic ? "خدماتنا" : "Our Services"}
-                </button>
+                <Link href="/services/communications-regulation">
+                  <div className="px-6 py-3 border border-white/30 text-white rounded-xl font-medium hover:bg-white/10 transition-colors duration-200">
+                    {isArabic ? "خدماتنا" : "Our Services"}
+                  </div>
+                </Link>
               </div>
             </CardContent>
           </Card>
         </motion.div>
       </div>
     </div>
-  )
+  );
 }

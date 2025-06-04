@@ -2,6 +2,13 @@ import type React from "react"
 import { LanguageProvider } from "@/contexts/language-context"
 import { Navbar } from "@/components/navbar"
 import "./globals.css"
+import { Tajawal } from "next/font/google"
+
+const tajawal = Tajawal({
+  subsets: ["arabic", "latin"],
+  weight: ["400", "500", "700"], // You can customize as needed
+  display: "swap",
+})
 
 export default function RootLayout({
   children,
@@ -9,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={tajawal.className}>
       <body>
         <LanguageProvider>
           <Navbar />
@@ -21,5 +28,11 @@ export default function RootLayout({
 }
 
 export const metadata = {
-      generator: 'v0.dev'
-    };
+  title: 'GACI',
+  description: 'General Authority of comms & informatics Libya.',
+  generator: 'Built by Mismari',
+  authors: { name: 'Mismari'},
+    icons: {
+    icon: "/favicon.ico",
+  },
+}

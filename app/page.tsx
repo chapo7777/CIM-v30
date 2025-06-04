@@ -117,7 +117,7 @@ const services = [
     ],
     additionalInfoAr: "مزيد من المعلومات باللغة العربية",
     additionalInfoEn: "More information in English",
-    href: "/communications",
+    href: "/services/communications-regulation",
   },
   {
     id: 2,
@@ -152,7 +152,7 @@ const services = [
     ],
     additionalInfoAr: "مزيد من المعلومات حول الحكومة الإلكترونية",
     additionalInfoEn: "More information about E-Government services",
-    href: "/e-government",
+    href: "/services/e-government",
   },
   {
     id: 3,
@@ -182,7 +182,7 @@ const services = [
     `,
     additionalInfoAr: "مزيد من المعلومات حول الأمن السيبراني",
     additionalInfoEn: "More information about Cybersecurity services",
-    href: "/cybersecurity",
+    href: "/services/cybersecurity",
   },
   {
     id: 4,
@@ -212,7 +212,7 @@ const services = [
     `,
     additionalInfoAr: "مزيد من المعلومات حول التحول الرقمي",
     additionalInfoEn: "More information about Digital Transformation",
-    href: "/digital-transformation",
+    href: "/services/digital-transformation",
   },
 ]
 
