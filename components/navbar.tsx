@@ -122,22 +122,32 @@ export const Navbar = () => {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <div className="flex items-center group">
-              <div className="relative mx-5 p-3 bg-gradient-to-br from-slate-50 to-white border border-slate-200/60 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg overflow-hidden">
-                  <Image
-                    src="/logo.png"
-                    alt="GACI Logo"
-                    width={40}
-                    height={40}
-                    className="object-contain w-full h-full"
-                    priority
-                  />
-                </div>
+              <div className="relative mx-5 p-3  rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                <Link href="/">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg overflow-hidden">
+                    <Image
+                      src="/logo.png"
+                      alt="GACI Logo"
+                      width={40}
+                      height={40}
+                      className="object-contain w-full h-full"
+                      priority
+                    />
+                  </div>
+                </Link>
               </div>
               <div className="ml-4">
-                <span className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent tracking-tight">
-                  G A C I
-                </span>
+                {isArabic ? (
+                  <img
+                    src="/GACI-AR.png"
+                    alt="GACI Arabic Logo"
+                    className="h-8"
+                  />
+                ) : (
+                  <span className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent tracking-tight">
+                    G A C I
+                  </span>
+                )}
               </div>
             </div>
 

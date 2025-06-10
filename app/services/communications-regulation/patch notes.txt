@@ -1,0 +1,14 @@
+# Got it! Here’s a cleaned, fixed, and refactored version of your code snippet with improvements on:
+
+# Consistent RTL/LTR handling via a helper function
+
+# Added aria-label on buttons for accessibility
+
+# Improved button placement (removed fixed position for better flow)
+
+# Reduced repeated ternary logic in JSX
+
+# Clean classNames management
+
+# Comments for clarity
+

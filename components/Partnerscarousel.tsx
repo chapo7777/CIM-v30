@@ -7,7 +7,7 @@ import { useState, useEffect } from "react"
 const partners = [
   {
     id: 1,
-    name: "International Telecommunication Union",
+    name: "International Telecom Union",
     nameAr: "الاتحاد الدولي للاتصالات",
     logo: "partners/ITU.png",
   },
@@ -35,6 +35,12 @@ const partners = [
     nameAr: "هاتف ليبيا",
     logo: "partners/Hatif-Libya.png",
   },
+  {
+    id: 6,
+    name: "Qualitative Communications Company",
+    nameAr: "شركة الاتصالات النوعية",
+    logo: "partners/naweya.png",
+  },
 ]
 
 export default function PartnersCarousel() {
@@ -42,7 +48,22 @@ export default function PartnersCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
 
-  const itemsPerView = 4
+  // Responsive itemsPerView: 1 on small screens, 4 otherwise
+  const [itemsPerView, setItemsPerView] = useState(4)
+
+  useEffect(() => {
+    function updateItemsPerView() {
+      if (window.innerWidth < 640) {
+        setItemsPerView(1)
+      } else {
+        setItemsPerView(4)
+      }
+    }
+    updateItemsPerView()
+    window.addEventListener("resize", updateItemsPerView)
+    return () => window.removeEventListener("resize", updateItemsPerView)
+  }, [])
+
   const maxIndex = Math.max(0, partners.length - itemsPerView)
 
   useEffect(() => {
@@ -89,7 +110,11 @@ export default function PartnersCarousel() {
             }}
           >
             {partners.map((partner) => (
-              <div key={partner.id} className="flex-shrink-0 px-4" style={{ width: `${100 / itemsPerView}%` }}>
+              <div
+                key={partner.id}
+                className="flex-shrink-0 px-4"
+                style={{ width: `${100 / itemsPerView}%` }}
+              >
                 <div className="bg-white rounded-xl border border-slate-200 p-6 hover:shadow-lg transition-all duration-300 hover:border-blue-300 group">
                   <div className="flex items-center justify-center h-20 mb-4">
                     <img

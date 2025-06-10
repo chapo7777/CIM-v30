@@ -14,20 +14,20 @@ export function FacebookFeed() {
       {
         id: 1,
         created_time: "2025-05-13",
-        message: "📢 بيان نفي حول منح رخصة شاملة ",
-        permalink_url: "/mock-news/mock1",
-        full_picture: "/news/N1.jpg", // ✅ Optional local image
+        message: "الإنتقال الى ipv6",
+        permalink_url: "/mock-news/mock2",
+        full_picture: "/mock-news/n2.jpg", // Optional local image
       },
       {
         id: 2,
         created_time: "2025-05-30T14:30:00Z",
-        message: "📰 تحديث محلي آخر للمجتمع.",
-        permalink_url: "/news/community-update",
-        full_picture: null, // ✅ No image
+        message: "📰بيان نفي حول منح رخصة شاملة",
+        permalink_url: "/mock-news/mock1",
+        full_picture: "/mock-news/N1.jpg",
       },
     ]
 
-    // Simulate loading local news (no API)
+    // Simulating loading local news (no API)
     setPosts(localNews)
     setLoading(false)
   }, [])

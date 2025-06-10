@@ -15,9 +15,8 @@ export default function NewsPage() {
           <p className="text-lg text-center mb-8">
             {isArabic
               ? "آخر الأخبار والتحديثات من صفحتنا على فيسبوك"
-              : "Latest news and updates from our Facebook page"}
+              : "Latest news and updates from The Authority"}
           </p>
-
           <FacebookFeed />
         </div>
       </main>

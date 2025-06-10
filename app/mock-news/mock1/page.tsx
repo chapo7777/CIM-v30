@@ -11,8 +11,8 @@ export default function NewsPageN1() {
   <h1 className="text-3xl font-extrabold text-blue-900 mb-8 tracking-wide">بيان رسمي</h1>
 
   <Image
-    src="/news/N1.jpg"
-    alt="الهيئة العامة للاتصالات - بيان"
+    src="/news/n2.jpg"
+    alt="ipv6"
     width={768}
     height={960}
     className="rounded-lg shadow-md mb-10"
@@ -20,7 +20,7 @@ export default function NewsPageN1() {
 
   <div className="text-gray-900 leading-relaxed space-y-8 max-w-prose mx-auto font-serif text-lg">
     <p className="indent-8">
-      تتابع الهيئة العامة للاتصالات والمعلوماتية بحكومة الوحدة الوطنية ما يتم تداوله عبر بعض المنصات ووسائل الإعلام بشأن إصدار تراخيص شاملة للاتصالات وتقنية المعلومات.
+      الهيئة العامة للاتصالات والمعلوماتية تعلن من مدينة مراكش البدء في الانتقال إلى IPV6
     </p>
     <p className="indent-8">
       وإذ تؤكد الهيئة أن ما ورد من معلومات في هذا الشأن عارٍ تماماً عن الصحة، فإننا نذكر الجميع بأن الجهة الوحيدة المخولة قانونياً بمنح تراخيص الاتصالات والخدمات المضافة والمرتبطة بها أو تنظيمها أو سحبها أو تعليقها هي الهيئة العامة للاتصالات والمعلوماتية بحكومة الوحدة الوطنية.

@@ -2,12 +2,12 @@ import type React from "react"
 import { LanguageProvider } from "@/contexts/language-context"
 import { Navbar } from "@/components/navbar"
 import "./globals.css"
-import { Tajawal } from "next/font/google"
+import { Tajawal } from 'next/font/google'
 
 const tajawal = Tajawal({
-  subsets: ["arabic", "latin"],
-  weight: ["400", "500", "700"], // You can customize as needed
-  display: "swap",
+  subsets: ['arabic', 'latin'],
+  weight: ['400', '500', '700'],
+  display: 'swap',
 })
 
 export default function RootLayout({
@@ -16,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={tajawal.className}>
+   <html lang="en" className={tajawal.className}>
       <body>
         <LanguageProvider>
           <Navbar />

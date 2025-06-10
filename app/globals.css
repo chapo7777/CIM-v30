@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
+html, body {
+  font-family: inherit;
 }
 
 @layer utilities {
@@ -16,6 +16,14 @@ body {
   position: relative;
   z-index: 0;
 }
+
+/* Font */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+
+html {
+  font-family: 'Tajawal', sans-serif;
+}
+
 
 .gradient-shadow::before {
   content: "";

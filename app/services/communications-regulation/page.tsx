@@ -26,23 +26,20 @@ import {
   Phone,
   Users,
   Building,
-  FileText,
-  Clock,
-  ArrowDown01,
-  Lock,
-  Shield,
-  DollarSign,
-  Wifi,
-  AlertTriangle,
   RadioTower,
+  Clock,
   FileTextIcon,
   Download,
   ExternalLink,
   CheckCircle,
   FileDigit,
-  Album,
-  BookOpenText,
-  SatelliteDish,
+  CircleCheckBig,
+  BrainCog,
+  HandHeart,
+  FileStack,
+  Truck,
+  Sparkle,
+  MapPinCheckInside,
 } from "lucide-react";
 import { useState } from "react";
 import dynamic from "next/dynamic";
@@ -70,12 +67,15 @@ export default function CommunicationsRegulationPage() {
   const [activeFileName, setActiveFileName] = useState<string | null>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const openPdf = (url: string, name: string) => {
-    setActiveFileUrl(url);
-    setActiveFileName(name);
-    setIsModalOpen(true);
+  const openPdf = (url: string, name: string, type: string) => {
+    if (type === "pdf") {
+      setActiveFileUrl(url);
+      setActiveFileName(name);
+      setIsModalOpen(true);
+    } else if (type === "page") {
+      window.open(url, "_blank");
+    }
   };
-
   const serviceData = [
     {
       ar: "الترقيم و الخدمات المضافة",
@@ -91,6 +91,7 @@ export default function CommunicationsRegulationPage() {
             en: "Numbering and Added Services Form",
           },
           url: "/pdfs/numbering.pdf",
+          type: "pdf",
         },
         {
           name: {
@@ -98,6 +99,7 @@ export default function CommunicationsRegulationPage() {
             en: "Free Short Number Allocation Request Form (14XX) Application Form",
           },
           url: "/pdfs/14XX.pdf",
+          type: "pdf",
         },
         {
           name: {
@@ -105,6 +107,7 @@ export default function CommunicationsRegulationPage() {
             en: "Non-toll-free short number allocation request form (15XX)",
           },
           url: "/pdfs/15XX.pdf",
+          type: "pdf",
         },
         {
           name: {
@@ -112,6 +115,7 @@ export default function CommunicationsRegulationPage() {
             en: "Toll-free number allocation request form (0800XXXXXXXX)",
           },
           url: "/pdfs/0800.pdf",
+          type: "pdf",
         },
         {
           name: {
@@ -119,6 +123,7 @@ export default function CommunicationsRegulationPage() {
             en: "Distinctive Number Allocation Application Form (0900XXXXXXXX)",
           },
           url: "/pdfs/0900.pdf",
+          type: "pdf",
         },
         {
           name: {
@@ -126,6 +131,7 @@ export default function CommunicationsRegulationPage() {
             en: "Table of tariff values for allocating value-added, short, toll-free, and premium-rate service numbers.",
           },
           url: "/pdfs/t1.pdf",
+          type: "pdf",
         },
         {
           name: {
@@ -133,6 +139,7 @@ export default function CommunicationsRegulationPage() {
             en: "Classification table and statement of value-added services numbers",
           },
           url: "/pdfs/t2.pdf",
+          type: "pdf",
         },
         {
           name: {
@@ -140,11 +147,13 @@ export default function CommunicationsRegulationPage() {
             en: "Executive Regulations for Numbering",
           },
           url: "/pdfs/list.pdf",
+          type: "pdf",
         },
       ],
       icon: <FileDigit className="text-blue-600 w-8 h-8" />,
       bgColor: "from-blue-100 to-blue-300",
       borderColor: "border-blue-200 hover:border-blue-400",
+      textColor: "text-blue-500",
     },
     {
       ar: "  الاعتماد النوعي",
@@ -159,18 +168,20 @@ export default function CommunicationsRegulationPage() {
             ar: " قائمة بالأجهزة المعتمدة نوعيا و المسموح بتوريدها و إستخدامها في ليبيا ",
             en: " List of type-approved devices permitted for import and use in Libya ",
           },
-          url: "/pdfs/c1-c3-a1.pdf",
+          url: "/pdfs/c1-s3-a1.pdf",
         },
         {
           name: { ar: "نموذج طلب الترخيص", en: "License Application Form" },
-          url: "/pdfs/c1-c3-a2.pdf",
+          url: "/pdfs/c1-s3-a2.pdf",
+          type: "pdf",
         },
         {
           name: {
             ar: "شروط ومتطلبات الترخيص",
             en: "Licensing Terms and Requirements",
           },
-          url: "/pdfs/c1-c3-a3.pdf",
+          url: "/pdfs/c1-s3-a3.pdf",
+          type: "pdf",
         },
         {
           name: {
@@ -178,15 +189,24 @@ export default function CommunicationsRegulationPage() {
             en: "Licensing Terms and Requirements",
           },
           url: "/pdfs/c1-c3-a4.pdf",
+          type: "pdf",
+        },
+        {
+          name: {
+            ar: "المزيد من المعلومات",
+            en: "More INFO",
+          },
+          url: "/INFO/Qualitative-accreditation",
+          type: "page",
         },
       ],
-      icon: <BookOpenText className="text-blue-600 w-8 h-8" />,
+      icon: <CircleCheckBig className="text-blue-600 w-8 h-8" />,
       bgColor: "from-blue-50 to-blue-100",
       borderColor: "border-blue-200 hover:border-blue-400",
     },
 
     {
-      ar:  "الطيف الترددى",
+      ar: "الطيف الترددى",
       en: "Frequency spectrum ",
       description: {
         ar: " يقصد بالطيف الترددي المدى الترددي للموجات الكهرومغناطيسية و التي تنتشر لاسلكياً و الممتد من 3 كيلوهيرتز حتى 3000 جيجاهيرتز و التي يتم استخدامها في أغراض الاتصالات و التحكم و الملاحة الجوية و البحرية و القياسات و الاستشعار عن بعد و المراقبة و في غيرها من التطبيقات العلمية و الصناعية و الطبية الأخرى",
@@ -198,97 +218,120 @@ export default function CommunicationsRegulationPage() {
             ar: "  نموذج شكوى بخصوص تداخل ضارا",
             en: "Harmful Interference Complaint Form",
           },
-          url: "/pdfs/c1-c4-c1.pdf",
+          url: "/pdfs/c1-s4-a1.pdf",
+          type: "pdf",
         },
         {
           name: { ar: "نموذج طلب الترخيص", en: "License Application Form" },
-          url: "/pdfs/c1-c4-c2.pdf",
+          url: "/pdfs/c1-s4-a2.pdf",
+          type: "pdf",
         },
         {
           name: {
             ar: "شروط ومتطلبات الترخيص",
             en: "Licensing Terms and Requirements",
           },
-          url: "/pdfs/c1-c4-c3.pdf",
+          url: "/pdfs/c1-s4-a3.pdf",
+          type: "pdf",
         },
-         {
+        {
           name: {
             ar: "شروط ومتطلبات الترخيص",
             en: "Licensing Terms and Requirements",
           },
-          url: "/pdfs/c1-c4-c4.pdf",
+          url: "/pdfs/c1-s4-a4.pdf",
+          type: "pdf",
         },
-         {
+        {
           name: {
             ar: "شروط ومتطلبات الترخيص",
             en: "Licensing Terms and Requirements",
           },
-          url: "/pdfs/c1-c4-c5.pdf",
+          url: "/pdfs/c1-s4-a5.pdf",
+          type: "pdf",
         },
-         {
+        {
           name: {
             ar: "شروط ومتطلبات الترخيص",
             en: "Licensing Terms and Requirements",
           },
-          url: "/pdfs/c1-c4-c6.pdf",
+          url: "/pdfs/c1-s4-a6.pdf",
+          type: "pdf",
+        },
+        {
+          name: {
+            ar: "المزيد من المعلومات",
+            en: "More INFO",
+          },
+          url: "/INFO/frequency",
+          type: "page",
         },
       ],
-      icon: <SatelliteDish className="text-blue-600 w-8 h-8" />,
+      icon: <RadioTower className="text-blue-600 w-8 h-8" />,
       bgColor: "from-blue-50 to-blue-100",
       borderColor: "border-blue-200 hover:border-blue-400",
     },
 
     {
-      ar: "مراقبة جودة الخدمات المقدمة من شركات الاتصالات",
-      en: "Monitoring the quality of services provided by telecommunications companies",
+      ar: "تنظيم خدمات المعلوماتية",
+      en: "Organization of information services",
       description: {
         ar: "تقوم الهيئة بمراقبة جودة الخدمات المقدمة من شركات الاتصالات وضمان التزامها بالمعايير المحددة.",
         en: "The Authority monitors the quality of services provided by telecommunications companies and ensures their compliance with specified standards.",
       },
       files: [
         {
-          name: { ar: "تقرير جودة الخدمة", en: "Service Quality Report" },
-          url: "/attachments/948.pdf",
+          name: {
+            ar: "النطاق العلوي الوطني ( Ly.) ",
+            en: "National top-level domain (.Ly.)",
+          },
+          url: "/others/gov-ly",
+          type: "page",
         },
         {
           name: {
-            ar: "مؤشرات الأداء الرئيسية",
-            en: "Key Performance Indicators",
+            ar: "التقنيات",
+            en: "Technologies",
           },
-          url: "/pdfs/kpi-report.pdf",
+          url: "/others/tech",
+          type: "page",
+        },
+        {
+          name: {
+            ar: "البلاغات",
+            en: "Reports",
+          },
+          url: "/others/reports",
+          type: "page",
         },
       ],
-      icon: <Shield className="text-emerald-600 w-8 h-8" />,
-      bgColor: "from-emerald-50 to-emerald-100",
-      borderColor: "border-emerald-200 hover:border-emerald-400",
+      icon: <BrainCog className="text-cyan-600 w-8 h-8" />,
+      bgColor: "from-cyan-50 to-cyan-100",
+      borderColor: "border-cyan-200 hover:border-cyan-400",
     },
     {
-      ar: "تنظيم أسعار الخدمات وضمان العدالة في التسعير",
-      en: "Regulating service prices and ensuring fair pricing",
+      ar: "مشورات عامة",
+      en: "General Requests",
       description: {
         ar: "تعمل الهيئة على تنظيم أسعار خدمات الاتصالات وضمان العدالة في التسعير بما يحقق التوازن بين مصالح المستهلكين ومقدمي الخدمات.",
         en: "The Authority regulates telecommunications service prices and ensures fair pricing to achieve a balance between the interests of consumers and service providers.",
       },
       files: [
         {
-          name: { ar: "لائحة تنظيم الأسعار", en: "Price Regulation Policy" },
-          url: "/pdfs/service3.pdf",
-        },
-        {
-          name: { ar: "دراسة مقارنة للأسعار", en: "Comparative Price Study" },
-          url: "/pdfs/price-comparison.pdf",
+          name: { ar: "المزيد من المعلومات", en: "More INFO" },
+          url: "INFO/gen-req",
         },
       ],
-      icon: <DollarSign className="text-amber-600 w-8 h-8" />,
-      bgColor: "from-amber-50 to-amber-100",
-      borderColor: "border-amber-200 hover:border-amber-400",
+      icon: <HandHeart className="text-violet-600 w-8 h-8" />,
+      bgColor: "from-violet-50 to-violet-100",
+      borderColor: "border-violet-200 hover:border-violet-400",
     },
     {
-      ar: "حل النزاعات بين شركات الاتصالات والمستهلكين",
-      en: "Resolving disputes between telecommunications companies and consumers",
+      ar: "وثائق مرجعية",
+      en: "Reference documents",
       description: {
-        ar: "تقوم الهيئة بدور الوسيط في حل النزاعات بين شركات الاتصالات والمستهلكين وفقًا للقوانين واللوائح المنظمة.",
-        en: "The Authority acts as a mediator in resolving disputes between telecommunications companies and consumers in accordance with governing laws and regulations.",
+        ar: "",
+        en: "",
       },
       files: [
         {
@@ -296,77 +339,64 @@ export default function CommunicationsRegulationPage() {
             ar: "إجراءات تسوية النزاعات",
             en: "Dispute Resolution Procedures",
           },
-          url: "/pdfs/service4.pdf",
+          url: "/pdfs/c1-s7-a1.pdf",
+          type: "pdf",
         },
         {
           name: { ar: "نموذج تقديم شكوى", en: "Complaint Submission Form" },
-          url: "/pdfs/complaint-form.pdf",
+          url: "/pdfs/c1-s7-a2.pdf",
+        },
+        {
+          name: {
+            ar: "إجراءات تسوية النزاعات",
+            en: "Dispute Resolution Procedures",
+          },
+          url: "/pdfs/c1-s7-a3.pdf",
+          type: "pdf",
+        },
+        {
+          name: {
+            ar: "إجراءات تسوية النزاعات",
+            en: "Dispute Resolution Procedures",
+          },
+          url: "/pdfs/c1-s7-a4.pdf",
+          type: "pdf",
         },
       ],
-      icon: <AlertTriangle className="text-rose-600 w-8 h-8" />,
+      icon: <FileStack className="text-fuchsia-600 w-8 h-8" />,
       bgColor: "from-rose-50 to-rose-100",
       borderColor: "border-rose-200 hover:border-rose-400",
     },
     {
-      ar: "وضع معايير الأمان والحماية للشبكات",
-      en: "Setting safety and protection standards for networks",
+      ar: "الخدمــــــات البريدية",
+      en: "Postal Services",
       description: {
-        ar: "تضع الهيئة معايير الأمان والحماية لشبكات الاتصالات بما يضمن سلامة البنية التحتية وحماية بيانات المستخدمين.",
-        en: "The Authority sets safety and protection standards for telecommunications networks to ensure infrastructure security and user data protection.",
+        ar: "دور الخدمات البريدية :  تقوم بتنظيم ومتابعة الخدمات البريدية والإشراف عليها، للتأكد من تقديمها وفقاً للضوابط والسياسات الصادرة،  ومن أهمها تحديد الجهات المرخص لها لتقديم الخدمات البريدية، و إصدار تراخيص مزاولة نشاط تجميع ونقل وتوزيع البريد السريع المحلي والدولي، لتقديم خدمة أو أكثر من الخدمات البريدية، ومتابعة مزاولة النشاط وفق اللائحة التنظيمية للخدمات البريدية، مع مراعاة الاتفاقيات التي تشمل اتفاقيات الاتحاد البريدي العالمي، وأية اتفاقيات ثنائية أو إقليمية معتمدة في مجال الخدمات البريدية، وذلك عبر الإدارة العامة لشؤون التنظيم بالهيئة. ",
+        en: "The role of postal services: It regulates, monitors and supervises postal services to ensure that they are provided in accordance with the issued controls and policies, the most important of which is identifying the entities licensed to provide postal services, issuing licenses to practice the activity of collecting, transporting and distributing local and international express mail, to provide one or more postal services, and following up on the practice of the activity in accordance with the postal services regulations, taking into account agreements that include the Universal Postal Union agreements, and any approved bilateral or regional agreements in the field of postal services, through the General Administration of Regulatory Affairs at the Authority.",
       },
       files: [
         {
           name: { ar: "معايير أمان الشبكات", en: "Network Security Standards" },
-          url: "/pdfs/service5.pdf",
+          url: "/pdfs/c1-s8-a1.pdf",
         },
         {
           name: {
             ar: "إرشادات حماية البيانات",
             en: "Data Protection Guidelines",
           },
-          url: "/pdfs/data-protection.pdf",
+          url: "/pdfs/c1-s8-a2.pdf",
         },
       ],
-      icon: <Lock className="text-violet-600 w-8 h-8" />,
+      icon: <Truck className="text-violet-600 w-8 h-8" />,
       bgColor: "from-violet-50 to-violet-100",
       borderColor: "border-violet-200 hover:border-violet-400",
-    },
-    {
-      ar: "إدارة الطيف الترددي وتوزيع الترددات",
-      en: "Managing frequency spectrum and frequency allocation",
-      description: {
-        ar: "تتولى الهيئة مسؤولية إدارة الطيف الترددي وتوزيع الترددات بكفاءة لضمان الاستخدام الأمثل للموارد المحدودة.",
-        en: "The Authority is responsible for managing the frequency spectrum and efficiently allocating frequencies to ensure optimal use of limited resources.",
-      },
-      files: [
-        {
-          name: { ar: "خطة توزيع الترددات", en: "Frequency Allocation Plan" },
-          url: "/pdfs/service6.pdf",
-        },
-        {
-          name: {
-            ar: "إجراءات طلب تخصيص ترددات",
-            en: "Frequency Assignment Request Procedures",
-          },
-          url: "/pdfs/frequency-request.pdf",
-        },
-        {
-          name: {
-            ar: "تقرير استخدام الطيف الترددي",
-            en: "Spectrum Usage Report",
-          },
-          url: "/pdfs/spectrum-report.pdf",
-        },
-      ],
-      icon: <RadioTower className="text-indigo-600 w-8 h-8" />,
-      bgColor: "from-indigo-50 to-indigo-100",
-      borderColor: "border-indigo-200 hover:border-indigo-400",
     },
   ];
 
   return (
     <SidebarProvider>
       <AppSidebar />
+
       <SidebarInset>
         <header
           className={`flex h-16 shrink-0 items-center gap-2 border-b border-slate-200/60 px-4 bg-gradient-to-r from-slate-50/80 to-blue-50/50 backdrop-blur-sm ${
@@ -395,7 +425,7 @@ export default function CommunicationsRegulationPage() {
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem className="hidden md:block">
                 <BreadcrumbLink
-                  href="/#services"
+                  href="/#"
                   className="text-slate-600 hover:text-blue-700 transition-colors"
                 >
                   {isArabic ? "الخدمات" : "Services"}
@@ -424,10 +454,10 @@ export default function CommunicationsRegulationPage() {
                 <Phone className="w-8 h-8" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-slate-900">
+                <h1 className="text-3xl font-bold text-blue-800">
                   {isArabic ? "تنظيم الاتصالات" : "Communications Regulation"}
                 </h1>
-                <p className="text-lg text-slate-600">
+                <p className="text-lg text-blue-600">
                   {isArabic
                     ? "ترخيص وتنظيم شركات الاتصالات"
                     : "Telecom licensing and regulation"}
@@ -438,10 +468,10 @@ export default function CommunicationsRegulationPage() {
 
           {/* Overview */}
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-slate-200/60 shadow-sm">
-            <h2 className="text-2xl font-semibold text-slate-900 mb-6">
+            <h2 className="text-2xl font-semibold text-blue-700 mb-6">
               {isArabic ? "نظرة عامة" : "Overview"}
             </h2>
-            <p className="text-slate-700 leading-relaxed text-lg mb-8">
+            <p className="text-slate-800 leading-relaxed text-lg mb-8">
               {isArabic
                 ? "الإدارة العامة لشؤون التنظيم هي الجهة المسئولة عن تنظيم قطاع الاتصالات في ليبيا وتتولى تنظيم قطاع الاتصالات وتكنولوجيا المعلومات وقطاع البريد والنفاذ إلى الإعلام الرقمي."
                 : "The Communications Regulation department oversees Libya's telecommunications sector, ensuring high-quality services for citizens and businesses. We develop policies and standards that guarantee a fair competitive environment and reliable services."}
@@ -462,7 +492,7 @@ export default function CommunicationsRegulationPage() {
               <div className="bg-emerald-50/80 rounded-xl p-6 text-center border border-emerald-100/60">
                 <Building className="w-12 h-12 text-emerald-600 mx-auto mb-4" />
                 <h3 className="font-semibold text-slate-900 mb-2">
-                  {isArabic ? "��رخيص الشركات" : "Company Licensing"}
+                  {isArabic ? "ترخيص الشركات" : "Company Licensing"}
                 </h3>
                 <p className="text-sm text-slate-600">
                   {isArabic
@@ -471,7 +501,7 @@ export default function CommunicationsRegulationPage() {
                 </p>
               </div>
               <div className="bg-violet-50/80 rounded-xl p-6 text-center border border-violet-100/60">
-                <FileText className="w-12 h-12 text-violet-600 mx-auto mb-4" />
+                <Sparkle className="w-12 h-12 text-violet-600 mx-auto mb-4" />
                 <h3 className="font-semibold text-slate-900 mb-2">
                   {isArabic ? "وضع المعايير" : "Setting Standards"}
                 </h3>
@@ -491,8 +521,10 @@ export default function CommunicationsRegulationPage() {
             </h2>
 
             {isArabic ? (
-              <div className="text-slate-700 leading-relaxed">
-                <p className="mb-6 text-lg">خدمات القسم تشمل كل من الآتي:</p>
+              <div className="text-blue-500 leading-relaxed">
+                <p className="mb-6 text-lg text-slate-600">
+                  خدمات القسم تشمل كل من الآتي:
+                </p>
                 <ul className="space-y-3 text-base">
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
@@ -537,8 +569,8 @@ export default function CommunicationsRegulationPage() {
                 </ul>
               </div>
             ) : (
-              <div className="text-slate-700 leading-relaxed">
-                <p className="mb-6 text-lg">
+              <div className="text-blue-500 leading-relaxed">
+                <p className="mb-6 text-lg text-slate-600">
                   Our department's services include the following:
                 </p>
                 <ul className="space-y-3 text-base">
@@ -625,11 +657,6 @@ export default function CommunicationsRegulationPage() {
                           {isArabic ? service.ar : service.en}
                         </CardTitle>
                       </div>
-                      <Album
-                        className={`w-5 h-5 text-slate-400 transition-transform duration-200 flex-shrink-0 ${
-                          openIndex === index ? "rotate-180" : ""
-                        }`}
-                      />
                     </div>
                   </CardHeader>
                   <CardContent className="pt-0">
@@ -723,10 +750,15 @@ export default function CommunicationsRegulationPage() {
                                   <button
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      openPdf(
-                                        file.url,
-                                        isArabic ? file.name.ar : file.name.en
-                                      );
+                                      const name = isArabic
+                                        ? file.name.ar
+                                        : file.name.en;
+
+                                      if (file.type === "pdf") {
+                                        openPdf(file.url, name, "pdf");
+                                      } else if (file.type === "page") {
+                                        window.open(file.url, "_blank");
+                                      }
                                     }}
                                     className="p-2 rounded-lg bg-white/80 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors border border-blue-200/60 backdrop-blur-sm"
                                     title={
@@ -817,43 +849,38 @@ export default function CommunicationsRegulationPage() {
 
           {/* Contact Information */}
           <div className="bg-gradient-to-br from-blue-50/80 to-indigo-50/60 rounded-2xl p-8 border border-blue-100/60 backdrop-blur-sm">
-            <h2 className="text-2xl font-semibold text-slate-900 mb-6">
+            <h2 className="text-2xl font-semibold text-blue-700 mb-6">
               {isArabic ? "تواصل معنا" : "Contact Us"}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-semibold text-slate-900 mb-3">
+                <h3 className="font-semibold text-blue-500 mb-3">
                   {isArabic ? "معلومات الاتصال" : "Contact Information"}
                 </h3>
                 <div className="space-y-2 text-slate-700">
                   <p>
                     {isArabic
-                      ? "الهاتف: +218-21-123-4567"
-                      : "Phone: +218-21-123-4567"}
+                      ? "الهاتف : +218 21 361 9811/15"
+                      : "Phone: +218 21 361 9811/15"}
                   </p>
                   <p>
                     {isArabic
-                      ? "البريد الإلكتروني: regulation@gaci.gov.ly"
-                      : "Email: regulation@gaci.gov.ly"}
+                      ? "البريد الإلكتروني: regulation@cim.gov.ly"
+                      : "Email: regulation@cim.gov.ly"}
                   </p>
                   <p>
                     {isArabic
                       ? "العنوان: طرابلس، ليبيا"
-                      : "Address: Tripoli, Libya"}
+                      : "Address: AL-Zawiyah ST., Tripoli, Libya"}
                   </p>
-                </div>
-              </div>
-              <div>
-                <h3 className="font-semibold text-slate-900 mb-3">
-                  {isArabic ? "ساعات العمل" : "Working Hours"}
-                </h3>
-                <div className="flex items-center gap-2 text-slate-700">
-                  <Clock className="w-5 h-5" />
-                  <span>
-                    {isArabic
-                      ? "الأحد - الخميس: 8:00 ص - 4:00 م"
-                      : "Sunday - Thursday: 8:00 AM - 4:00 PM"}
-                  </span>
+                  <button 
+                    onClick={() =>
+                      (window.location.href = "https://www.google.com/maps/place/The+Central+Post+Office/@32.872999,13.1907074,17z/data=!3m1!4b1!4m6!3m5!1s0x13a893efdb123037:0x8377d9c7b512a575!8m2!3d32.872999!4d13.1907074!16s%2Fg%2F11sp18nm1s?entry=ttu&g_ep=EgoyMDI1MDYwNC4wIKXMDSoASAFQAw%3D%3D")
+                    }
+                    className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                  ><MapPinCheckInside/>
+                    <span>PinPoint!</span>
+                  </button>
                 </div>
               </div>
             </div>

@@ -14,6 +14,7 @@ import {
   Lock,
   Settings,
   Users,
+  Scale,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/language-context";
 import { SearchForm } from "./search-form";
@@ -63,6 +64,14 @@ const serviceButtons = [
     icon: Zap,
     description: "Digital modernization services",
     descriptionAr: "خدمات التحديث الرقمي",
+  },
+    {
+    title: "Telecommunications Services Licenses",
+    titleAr: "تراخيص خدمات الاتصالات",
+    url: "/services/Telecommunications-Services-Licenses",
+    icon: Scale,
+    description: "Telecommunications Services Licenses",
+    descriptionAr: "تراخيص خدمات الاتصالات",
   },
 ];
 
