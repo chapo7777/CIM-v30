@@ -12,7 +12,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { useLanguage } from "@/contexts/language-context"
-import { Zap, Smartphone, Cloud, Database, Cpu, TrendingUp, Clock } from "lucide-react"
+import { Zap, Smartphone, Cloud, Database, Cpu, TrendingUp, Clock, MapPinCheckInside } from "lucide-react"
 
 export default function DigitalTransformationPage() {
   const { isArabic } = useLanguage()
@@ -183,25 +183,42 @@ export default function DigitalTransformationPage() {
             </div>
           </div>
 
-          {/* Contact Information */}
-          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-100">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">{isArabic ? "تواصل معنا" : "Contact Us"}</h2>
+           {/* Contact Information */}
+          <div className="bg-gradient-to-br from-blue-50/80 to-indigo-50/60 rounded-2xl p-8 border border-blue-100/60 backdrop-blur-sm">
+            <h2 className="text-2xl font-semibold text-blue-700 mb-6">
+              {isArabic ? "تواصل معنا" : "Contact Us"}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">
+                <h3 className="font-semibold text-blue-500 mb-3">
                   {isArabic ? "معلومات الاتصال" : "Contact Information"}
                 </h3>
-                <div className="space-y-2 text-gray-700">
-                  <p>{isArabic ? "الهاتف: +218-21-456-7890" : "Phone: +218-21-456-7890"}</p>
-                  <p>{isArabic ? "البريد الإلكتروني: digital@gaci.gov.ly" : "Email: digital@gaci.gov.ly"}</p>
-                  <p>{isArabic ? "العنوان: طرابلس، ليبيا" : "Address: Tripoli, Libya"}</p>
-                </div>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3">{isArabic ? "ساعات العمل" : "Working Hours"}</h3>
-                <div className="flex items-center gap-2 text-gray-700">
-                  <Clock className="w-5 h-5" />
-                  <span>{isArabic ? "الأحد - الخميس: 8:00 ص - 4:00 م" : "Sunday - Thursday: 8:00 AM - 4:00 PM"}</span>
+                <div className="space-y-2 text-slate-700">
+                  <p>
+                    {isArabic
+                      ? "الهاتف : +218 21 361 9811/15"
+                      : "Phone: +218 21 361 9811/15"}
+                  </p>
+                  <p>
+                    {isArabic
+                      ? "البريد الإلكتروني: regulation@cim.gov.ly"
+                      : "Email: regulation@cim.gov.ly"}
+                  </p>
+                  <p>
+                    {isArabic
+                      ? "العنوان: طرابلس، ليبيا"
+                      : "Address: AL-Zawiyah ST., Tripoli, Libya"}
+                  </p>
+                  <button
+                    onClick={() =>
+                      (window.location.href =
+                        "https://www.google.com/maps/place/The+Central+Post+Office/@32.872999,13.1907074,17z/data=!3m1!4b1!4m6!3m5!1s0x13a893efdb123037:0x8377d9c7b512a575!8m2!3d32.872999!4d13.1907074!16s%2Fg%2F11sp18nm1s?entry=ttu&g_ep=EgoyMDI1MDYwNC4wIKXMDSoASAFQAw%3D%3D")
+                    }
+                    className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                  >
+                    <MapPinCheckInside />
+                    <span>PinPoint!</span>
+                  </button>
                 </div>
               </div>
             </div>

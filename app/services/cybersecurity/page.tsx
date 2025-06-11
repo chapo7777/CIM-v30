@@ -17,7 +17,6 @@ import {
   Shield,
   Users,
   Clock,
-  ArrowDown01,
   Lock,
   Eye,
   AlertTriangle,
@@ -26,6 +25,7 @@ import {
   ExternalLink,
   CheckCircle,
   Monitor,
+  MapPinCheckInside,
 } from "lucide-react"
 import { useState } from "react"
 import dynamic from "next/dynamic"
@@ -58,17 +58,7 @@ export default function CybersecurityPage() {
         en: "Comprehensive assessment of technical infrastructure and identification of vulnerabilities and security gaps with necessary recommendations to enhance security",
       },
       files: [
-        {
-          name: {
-            ar: "دليل تقييم الأمان",
-            en: "Security Assessment Guide",
-          },
-          url: "/pdfs/security-assessment.pdf",
-        },
-        {
-          name: { ar: "نموذج طلب التقييم", en: "Assessment Request Form" },
-          url: "/pdfs/assessment-form.pdf",
-        },
+        
       ],
       icon: <Shield className="text-blue-600 w-8 h-8" />,
       bgColor: "from-blue-50 to-blue-100",
@@ -82,17 +72,7 @@ export default function CybersecurityPage() {
         en: "24/7 continuous monitoring service for networks and systems to detect cyber threats and attacks and respond quickly to them",
       },
       files: [
-        {
-          name: { ar: "دليل المراقبة", en: "Monitoring Guide" },
-          url: "/pdfs/monitoring-guide.pdf",
-        },
-        {
-          name: {
-            ar: "تقرير المراقبة الشهري",
-            en: "Monthly Monitoring Report",
-          },
-          url: "/pdfs/monthly-report.pdf",
-        },
+     
       ],
       icon: <Monitor className="text-emerald-600 w-8 h-8" />,
       bgColor: "from-emerald-50 to-emerald-100",
@@ -106,14 +86,7 @@ export default function CybersecurityPage() {
         en: "Specialized team for rapid response to cyber incidents, security crisis management and threat containment",
       },
       files: [
-        {
-          name: { ar: "خطة الاستجابة للحوادث", en: "Incident Response Plan" },
-          url: "/pdfs/incident-response.pdf",
-        },
-        {
-          name: { ar: "نموذج الإبلاغ عن الحوادث", en: "Incident Reporting Form" },
-          url: "/pdfs/incident-form.pdf",
-        },
+   
       ],
       icon: <AlertTriangle className="text-amber-600 w-8 h-8" />,
       bgColor: "from-amber-50 to-amber-100",
@@ -127,17 +100,7 @@ export default function CybersecurityPage() {
         en: "Specialized training programs in cybersecurity and awareness campaigns for employees on security best practices",
       },
       files: [
-        {
-          name: {
-            ar: "برنامج التدريب الأمني",
-            en: "Security Training Program",
-          },
-          url: "/pdfs/training-program.pdf",
-        },
-        {
-          name: { ar: "دليل التوعية الأمنية", en: "Security Awareness Guide" },
-          url: "/pdfs/awareness-guide.pdf",
-        },
+      
       ],
       icon: <Users className="text-rose-600 w-8 h-8" />,
       bgColor: "from-rose-50 to-rose-100",
@@ -151,17 +114,7 @@ export default function CybersecurityPage() {
         en: "Sensitive data protection services and privacy assurance according to international standards and data protection laws",
       },
       files: [
-        {
-          name: { ar: "سياسة حماية البيانات", en: "Data Protection Policy" },
-          url: "/pdfs/data-protection.pdf",
-        },
-        {
-          name: {
-            ar: "إرشادات الخصوصية",
-            en: "Privacy Guidelines",
-          },
-          url: "/pdfs/privacy-guidelines.pdf",
-        },
+      
       ],
       icon: <Lock className="text-violet-600 w-8 h-8" />,
       bgColor: "from-violet-50 to-violet-100",
@@ -176,15 +129,8 @@ export default function CybersecurityPage() {
       },
       files: [
         {
-          name: { ar: "دليل اختبار الاختراق", en: "Penetration Testing Guide" },
-          url: "/pdfs/pentest-guide.pdf",
-        },
-        {
-          name: {
-            ar: "تقرير تقييم الثغرات",
-            en: "Vulnerability Assessment Report",
-          },
-          url: "/pdfs/vulnerability-report.pdf",
+          name: { ar: "", en: "" },
+          url: "blank",
         },
       ],
       icon: <Eye className="text-indigo-600 w-8 h-8" />,
@@ -291,14 +237,14 @@ export default function CybersecurityPage() {
           </div>
 
           {/* Key Services */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-slate-200/60 shadow-sm">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-slate-200/60 shadow-sm">
             <h2 className="text-2xl font-semibold text-slate-900 mb-6">
               {isArabic ? "الخدمات الرئيسية" : "Key Services"}
             </h2>
 
             {isArabic ? (
-              <div className="text-slate-700 leading-relaxed">
-                <p className="mb-6 text-lg">تشمل خدمات الأمن السيبراني:</p>
+               <div className="text-blue-500 leading-relaxed">
+                <p className="mb-6 text-lg text-slate-600">تشمل خدمات الأمن السيبراني:</p>
                 <ul className="space-y-3 text-base">
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
@@ -388,11 +334,7 @@ export default function CybersecurityPage() {
                           {isArabic ? service.ar : service.en}
                         </CardTitle>
                       </div>
-                      <ArrowDown01
-                        className={`w-5 h-5 text-slate-400 transition-transform duration-200 flex-shrink-0 ${
-                          openIndex === index ? "rotate-180" : ""
-                        }`}
-                      />
+                      
                     </div>
                   </CardHeader>
                   <CardContent className="pt-0">
@@ -489,23 +431,38 @@ export default function CybersecurityPage() {
 
           {/* Contact Information */}
           <div className="bg-gradient-to-br from-blue-50/80 to-indigo-50/60 rounded-2xl p-8 border border-blue-100/60 backdrop-blur-sm">
-            <h2 className="text-2xl font-semibold text-slate-900 mb-6">{isArabic ? "تواصل معنا" : "Contact Us"}</h2>
+            <h2 className="text-2xl font-semibold text-blue-700 mb-6">
+              {isArabic ? "تواصل معنا" : "Contact Us"}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-semibold text-slate-900 mb-3">
+                <h3 className="font-semibold text-blue-500 mb-3">
                   {isArabic ? "معلومات الاتصال" : "Contact Information"}
                 </h3>
                 <div className="space-y-2 text-slate-700">
-                  <p>{isArabic ? "الهاتف: +218-21-123-4567" : "Phone: +218-21-123-4567"}</p>
-                  <p>{isArabic ? "البريد الإلكتروني: cybersec@gaci.gov.ly" : "Email: cybersec@gaci.gov.ly"}</p>
-                  <p>{isArabic ? "العنوان: طرابلس، ليبيا" : "Address: Tripoli, Libya"}</p>
-                </div>
-              </div>
-              <div>
-                <h3 className="font-semibold text-slate-900 mb-3">{isArabic ? "ساعات العمل" : "Working Hours"}</h3>
-                <div className="flex items-center gap-2 text-slate-700">
-                  <Clock className="w-5 h-5" />
-                  <span>{isArabic ? "الأحد - الخميس: 8:00 ص - 4:00 م" : "Sunday - Thursday: 8:00 AM - 4:00 PM"}</span>
+                  <p>
+                    {isArabic
+                      ? "الهاتف : +218 21 361 9811/15"
+                      : "Phone: +218 21 361 9811/15"}
+                  </p>
+                  <p>
+                    {isArabic
+                      ? "البريد الإلكتروني:  info@nissa.gov.ly"
+                      : "Email:  info@nissa.gov.ly"}
+                  </p>
+                  <p>
+                    {isArabic
+                      ? "العنوان: طرابلس، ليبيا"
+                      : "Address: AL-Zawiyah ST., Tripoli, Libya"}
+                  </p>
+                  <button 
+                    onClick={() =>
+                      (window.location.href = "https://www.google.com/maps/place/The+Central+Post+Office/@32.872999,13.1907074,17z/data=!3m1!4b1!4m6!3m5!1s0x13a893efdb123037:0x8377d9c7b512a575!8m2!3d32.872999!4d13.1907074!16s%2Fg%2F11sp18nm1s?entry=ttu&g_ep=EgoyMDI1MDYwNC4wIKXMDSoASAFQAw%3D%3D")
+                    }
+                    className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                  ><MapPinCheckInside/>
+                    <span>PinPoint!</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -519,11 +476,10 @@ export default function CybersecurityPage() {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           pdfUrl={activeFileUrl}
-          title={activeFileName || "PDF Document"}
-        />
+          title={activeFileName || "PDF Document"} content={[]}        />
       )}
 
-      <LanguageToggle />
+    
     </SidebarProvider>
   )
 }
